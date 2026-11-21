@@ -23,7 +23,7 @@ export function AdminProductManager({products:initial,categories}:{products:Admi
   const [products,setProducts]=useState(initial);
   const [name,setName]=useState("");const [slug,setSlug]=useState("");const [description,setDescription]=useState("");
   const [price,setPrice]=useState("");const [sku,setSku]=useState("");const [categoryId,setCategoryId]=useState("");
-  const [hsnCode,setHsnCode]=useState("");const [gstRate,setGstRate]=useState("");const [priceIncludesTax:priceIncludesTax===true,setPriceIncludesTax]=useState<boolean|null>(null);const [availability,setAvailability]=useState<Availability>("available_to_order");
+  const [hsnCode,setHsnCode]=useState("");const [gstRate,setGstRate]=useState("");const [priceIncludesTax,setPriceIncludesTax]=useState<boolean|null>(null);const [availability,setAvailability]=useState<Availability>("available_to_order");
   const [busy,setBusy]=useState(false);const [error,setError]=useState("");const [message,setMessage]=useState("");
 
   function changeName(value:string){setName(value);setSlug(value.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""));}
@@ -35,7 +35,7 @@ export function AdminProductManager({products:initial,categories}:{products:Admi
     try{
       const response=await fetch("/api/admin/products",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
         name,slug,description,categoryId:categoryId||null,pricePaise:Math.round(priceNumber*100),sku,variantLabel:"Default",availability,
-        hsnCode,gstRateBps:Math.round(Number(gstRate)*100),priceIncludesTax,
+        hsnCode,gstRateBps:Math.round(Number(gstRate)*100),priceIncludesTax:priceIncludesTax===true,
       })});
       const result=await response.json();if(!response.ok)throw new Error(result.error);
       setMessage("Product created. Refreshing catalogue…");window.location.reload();
