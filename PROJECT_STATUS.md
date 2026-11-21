@@ -58,9 +58,13 @@
 - [ ] Apply migration 006 and run pgTAP against development Supabase.
 - [ ] Configure Razorpay test keys/webhook and validate successful, failed, duplicate and delayed events.
 - [ ] Confirm GST/HSN, seller registration, state/place-of-supply, freight tax, invoice numbering and price-inclusion treatment with owner/accountant.
-- [ ] Verify Razorpay test order creation, signature verification, webhook verification and idempotent payment/order updates against merchant test credentials.
+- [x] Razorpay order creation, HMAC/API payment verification, signed captured/failed webhook reconciliation and idempotent order updates added on `feature/production-checkout-payments`.
+- [x] Admin fulfilment transitions paid → processing → shipped → delivered, with carrier/tracking and audit history, added on `feature/production-checkout-payments`.
+- [ ] Merge PR #19 after the latest CI run passes.
+- [ ] Apply migration 006 and run pgTAP against development Supabase.
+- [ ] Verify Razorpay test payments, failed payments, duplicate/delayed webhooks and payment reconciliation against merchant test credentials.
 - [ ] Complete checkout, order confirmation, email notifications and order history testing.
-- [ ] Complete admin order fulfilment, product variant editing, image ordering and remaining management workflows.
+- [ ] Complete refunds/cancellations, product variant price editing, image ordering and remaining management workflows.
 - [ ] Run full browser, accessibility, security and performance testing.
 - [ ] Configure Vercel and verify a deployment before claiming a live URL.
 
@@ -69,7 +73,7 @@
 - Supabase credentials are not available in this development environment. Code and CI are validated, but live database-backed flows are not yet runtime-verified.
 - The database migration and pgTAP suite have not been applied/executed against a real Supabase project.
 - No real product catalogue or owner-approved product photography has been supplied; no products or sales data are fabricated.
-- Checkout/payment code is implemented but must remain inactive until Supabase migration 006, test credentials, tax/invoice rules and webhook runtime tests are completed. The GST split/invoice engine, refunds and order fulfilment remain outstanding.
+- Checkout/payment and basic admin fulfilment code is implemented but must remain inactive until Supabase migration 006, test credentials, tax/invoice rules and webhook runtime tests are completed. GST split/invoice engine, refunds and notifications remain outstanding.
 - No production deployment exists or has been verified.
 
 ## Confirmed release-one business rules
