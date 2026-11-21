@@ -1,43 +1,62 @@
-# Backend foundation — integration handoff
+# Backend and Supabase integration handoff
 
-## Implemented in this branch
+## Current implementation
 
-- Supabase/PostgreSQL migration for customer identity/profile, role mapping, addresses, catalogue, collections, product media, owner-managed availability, location-based shipping zones/rates, customer carts/wishlists, order snapshots, payment records/events, order history, and admin audit logs.
-- Row Level Security is enabled on every application table. Customers can read their own private records; public catalogue reads are limited to active/published data; admin management is guarded by the database role helper.
-- New users receive a profile and the non-privileged `customer` role from an auth trigger. Client-side role assignment has no write policy.
-- INR monetary values are integer paise. Shipping quotes resolve configured postal-code prefixes and subtotal thresholds on the server; the applied fee and estimated delivery dates have columns on the order.
-- SQL regression tests assert core tables, RLS, absence of quantity inventory, and privileged shipping function grants.
-- `.env.example` contains placeholders only.
+The repository now contains a Next.js 15 / React 19 / TypeScript application and a Supabase/PostgreSQL backend foundation.
+
+Implemented code includes:
+- Customer profile and role provisioning through Supabase Auth trigger.
+- Customer-owned addresses, cart and wishlist.
+- Product categories, products, variants, availability and product image metadata.
+- Owner-managed shipping zones/rates and a server-only shipping quote RPC.
+- Orders, order items, payments, payment events, order history and admin audit records in the schema.
+- RLS policies on application tables.
+- Server-side customer APIs, admin role checks, private product media upload/read policies and shipping quote integration.
+
+The presence of schema tables for orders/payments does not mean the checkout/payment workflow is implemented. Razorpay order creation, signature verification, webhooks and order creation remain outstanding.
+
+## Migration sequence
+
+Apply to a disposable **development** Supabase project in this order:
+
+1. `supabase/migrations/20261121000100_backend_foundation.sql`
+2. `supabase/migrations/20261121000200_default_customer_address.sql`
+3. `supabase/migrations/20261121000300_admin_product_creation.sql`
+4. `supabase/migrations/20261121000400_product_media_storage.sql`
+5. `supabase/migrations/20261121000500_seed_store_categories.sql`
+
+Do not apply to production until reviewed, backed up and approved.
 
 ## Apply and test
 
-1. Create a Supabase development project; do not use production credentials.
-2. Copy `.env.example` to a local ignored env file and fill in development-only values.
+1. Create a Supabase development project.
+2. Copy `.env.example` to `.env.local` and fill development-only values.
 3. Install/use the Supabase CLI and link the development project.
-4. Apply the migration with `supabase db push`.
-5. Run database tests with `supabase test db`.
+4. Review all five migrations, then run `supabase db push`.
+5. Run `supabase test db` after enabling pgTAP.
+6. Create the owner Auth account and grant the `admin` role using `docs/backend/ADMIN_BOOTSTRAP.md`.
+7. Configure `SUPABASE_SERVICE_ROLE_KEY` on the server only for `quote_shipping`.
+8. Configure shipping zones/rates through `/admin/shipping`.
+9. Upload a test product image through `/admin/products` and verify anonymous signed-read behavior.
 
-The migration is versioned at `supabase/migrations/20261121000100_backend_foundation.sql`.
+**Important:** These migrations have not yet been applied to a Supabase instance in this environment. Runtime RLS, storage and RPC behavior remains unverified.
 
-## Deliberate release-one constraints
+## Release-one data and security rules
 
-No quantity inventory, reservation/decrement, guest checkout, returns/refunds, courier API, or browser-authoritative pricing/payment state. Availability is owner-managed. Order and payment writes are intentionally not exposed through customer RLS policies; a trusted server checkout/payment implementation must own these writes after its API contract is finalized.
+- INR monetary values are integer paise.
+- Availability is owner-managed; no quantity inventory or automatic stock decrement in release one.
+- Customer operations require a signed-in user and are constrained by user ownership and RLS.
+- Admin actions require the admin role server-side and in RLS.
+- Product media is private; anonymous reads are limited to images linked to active products.
+- Shipping quote is server-only and uses database prices and configured postal-code zones.
+- Order/payment writes are not exposed to customer RLS policies.
+- No guest checkout, courier API, returns/refunds or live payment activation in release one.
 
-## Integration handoff
+## Remaining backend work
 
-- **Agent 4 (auth):** Supabase Auth user creation automatically provisions `profiles` and `user_roles(role='customer')`. Admin promotion must be a trusted owner-only operation; never expose a role mutation endpoint to customers.
-- **Agent 5 (payments):** `payments` and unique `payment_events.provider_event_id` support verified, idempotent Razorpay webhook processing. The browser must never set payment success. Use the raw webhook body for signature verification.
-- **Agent 2 (frontend):** public reads use active catalogue rows; checkout requires a signed-in customer. Cart persistence is customer-only. All prices are paise.
-- **Agent 6 (admin):** manage catalogue, product availability and shipping configuration through server-authorized admin operations. Record meaningful changes in `admin_audit_logs`.
-- **Agent 7 (QA):** extend the pgTAP suite with authenticated customer A/customer B/admin JWT contexts and exercise actual select/insert/update/delete isolation, auth trigger behavior, and shipping-prefix/threshold precedence.
-
-## Not yet implemented / blocked by repository baseline
-
-The repository does not contain a Next.js app, package manifest, TypeScript configuration, shared validation library, or API route structure. Therefore no framework-specific API handlers, typed server data-access layer, npm lint/typecheck/build, or runnable app-level tests can be added without inventing a second application scaffold that may conflict with Agent 2/4's integration. This PR deliberately establishes the database foundation first. The next integration change should add server-side route handlers and validation after the frontend/runtime scaffold is merged.
-
-## Security notes
-
-- The service-role key is server-only and bypasses RLS; do not import it from client components.
-- `quote_shipping` is executable only by Supabase `service_role`; it returns no rate to anonymous/authenticated clients directly.
-- Do not expose private customer data in logs or fixtures.
-- This migration has not been applied to a Supabase instance in this environment. Review and run it on a disposable development project before production use.
+- Runtime RLS tests with anonymous, customer A, customer B and admin identities.
+- Atomic checkout/order creation and inventory/availability revalidation.
+- Tax/GST and invoice policy from owner/accountant.
+- Razorpay test order creation, payment signature verification, webhook verification and idempotent payment events.
+- Order status transitions, fulfilment, cancellation and refunds if approved.
+- Email notifications and operational audit review.
