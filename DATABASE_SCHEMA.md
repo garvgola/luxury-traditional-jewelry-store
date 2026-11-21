@@ -115,3 +115,12 @@ Potential later tables: coupons, coupon_redemptions, product_reviews, shipping_f
 ## 8. Migration and review requirements
 
 Before implementation, convert this proposal into versioned SQL migrations; define foreign keys, deletion behavior, unique constraints, check constraints, indexes, RLS policies, and test cases. Confirm inventory reservation, guest checkout, GST, shipping, returns, and product-variant decisions with the owner.
+
+
+## 9. Owner decisions recorded (2026-11-21)
+
+- Account required for order placement: anonymous visitors can read public catalogue content, but cart checkout/order creation must require an authenticated customer. A guest cart may be omitted for the first release unless the owner later requests it.
+- No per-variant stock tracking in the first release. Do not build quantity-on-hand/reserved stock tables or automatic stock decrement as a release-one dependency. Instead, support a simple owner-managed product/variant availability state or lead-time field (for example: available to order, made to order, temporarily unavailable) so demand-led procurement can be managed manually. The exact status vocabulary should be finalized with the admin UX.
+- Keep inventory quantities and reservation/movement ledgers as future-scope schema options, not current implementation requirements.
+- Returns/refunds are future scope. Preserve order and payment records so a future returns/refunds module can be added without redesigning core order identity; do not implement return-request tables or workflows in release one.
+- Shipping is owner-managed. No shipping-provider integration is required for release one. Persist the customer's delivery address snapshot and allow the owner to record shipping/tracking details and update fulfilment status manually. Shipping charge rules remain an owner decision before checkout is implemented.
