@@ -14,9 +14,13 @@ async function loadRazorpay(){
   if(window.Razorpay)return true;
   return new Promise<boolean>(resolve=>{
     const existing=document.querySelector<HTMLScriptElement>('script[data-razorpay-checkout="true"]');
-    if(existing){existing.addEventListener("load",()=>resolve(Boolean(window.Razorpay)),{once:true});existing.addEventListener("error",()=>resolve(false),{once:true});return;}
+    if(existing){
+      if(existing.dataset.loaded==="true"){resolve(Boolean(window.Razorpay));return;}
+      existing.addEventListener("load",()=>resolve(Boolean(window.Razorpay)),{once:true});
+      existing.addEventListener("error",()=>{existing.remove();resolve(false);},{once:true});return;
+    }
     const script=document.createElement("script");script.src="https://checkout.razorpay.com/v1/checkout.js";script.async=true;script.dataset.razorpayCheckout="true";
-    script.onload=()=>resolve(Boolean(window.Razorpay));script.onerror=()=>resolve(false);document.body.appendChild(script);
+    script.onload=()=>{script.dataset.loaded="true";resolve(Boolean(window.Razorpay));};script.onerror=()=>{script.remove();resolve(false);};document.body.appendChild(script);
   });
 }
 
