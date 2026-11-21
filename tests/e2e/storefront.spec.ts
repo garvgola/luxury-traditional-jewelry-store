@@ -44,3 +44,12 @@ test("mobile navigation opens and exposes account link",async({page})=>{
   await expect(page.getByRole("navigation",{name:"Mobile navigation"})).toBeVisible();
   await expect(page.getByRole("link",{name:"My account"})).toBeVisible();
 });
+
+test("security headers are present on public pages",async({page})=>{
+  const response=await page.goto("/");
+  expect(response).not.toBeNull();
+  expect(response?.headers()["x-content-type-options"]).toBe("nosniff");
+  expect(response?.headers()["x-frame-options"]).toBe("DENY");
+  expect(response?.headers()["referrer-policy"]).toBe("strict-origin-when-cross-origin");
+  expect(response?.headers()["content-security-policy"]).toContain("frame-ancestors 'none'");
+});
