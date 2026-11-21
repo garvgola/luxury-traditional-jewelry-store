@@ -237,3 +237,10 @@ button { font: inherit; }
 .customer-order-summary h3{font-family:Georgia,serif;font-weight:400;color:var(--burgundy-900);margin-top:25px}
 .customer-order-summary p{font-size:12px;color:var(--muted-600);line-height:1.7}
 @media(max-width:760px){.customer-order-layout{grid-template-columns:1fr}.customer-order-items,.customer-order-summary{padding:20px}}
+
+.admin-tax-editor{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;align-items:end;margin-top:12px;padding:10px;background:var(--ivory-50);border:1px solid var(--line-200)}
+.admin-tax-editor label{display:grid;gap:4px;font-size:10px;color:var(--muted-600)}
+.admin-tax-editor input,.admin-tax-editor select{min-width:0;width:100%;padding:6px;border:1px solid var(--line-200);background:#fffdf9;font-size:11px}
+.admin-tax-editor button{padding:7px 9px;background:var(--burgundy-800);color:white;font-size:10px}
+.admin-tax-editor small{grid-column:1/-1;color:var(--muted-600);font-size:10px}
+@media(max-width:600px){.admin-tax-editor{grid-template-columns:1fr 1fr}.admin-tax-editor button{grid-column:1/-1}}
