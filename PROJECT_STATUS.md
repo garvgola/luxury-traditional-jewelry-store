@@ -122,3 +122,32 @@ The documents on `develop` define the design baseline for Agent 2 frontend imple
 - [ ] Reconcile any visual-board color/font labels against the approved design tokens in `DESIGN_SYSTEM.md`; the written design-system tokens remain the source of truth unless the owner approves changes.
 
 **Current gate:** Phase 1 visual concept prepared; owner approval pending. Frontend implementation (Phase 2) is not yet authorized by this visual checkpoint.
+
+
+## Phase 2 — Frontend foundation (2026-11-21)
+
+**Status:** Initial scaffold committed on `feature/frontend-foundation`; validation and review pending.
+
+### Implemented in this milestone
+- [x] Next.js App Router + React + TypeScript project scaffold.
+- [x] Tailwind CSS configuration and semantic design-token values aligned to `DESIGN_SYSTEM.md`.
+- [x] Responsive global header with desktop navigation and mobile menu.
+- [x] Global footer and reusable section-heading component.
+- [x] Initial homepage layout with editorial hero, category entry points, brand-story section, and content placeholder.
+- [x] Initial route shells for collections, category pages, account, cart, wishlist, search, about, contact, shipping, FAQ, privacy, and care.
+- [x] Metadata and temporary favicon.
+- [x] README setup instructions, ESLint configuration, and GitHub Actions CI workflow.
+
+### Explicit limitations
+- The header wordmark is currently a typographic placeholder; the approved generated cream-background logo image has not yet been committed as a production asset.
+- The favicon is a temporary heritage-inspired mark, not a final logo derivative.
+- Category artwork is CSS-based placeholder artwork; no product images, product catalogue, pricing, reviews, or stock claims are being fabricated.
+- Account, cart, wishlist, search, shipping, and policy routes are non-functional placeholders pending their respective backend/content phases.
+- Supabase, authentication, admin, order management, Razorpay, live inventory, and production deployment are not implemented.
+- No local dependency installation, TypeScript check, lint run, browser test, or production build has been executed in this environment. CI is configured but its result is pending.
+
+### Review gate
+- [ ] Run install, type-check, lint, and production build in CI.
+- [ ] Inspect desktop and mobile browser rendering and accessibility.
+- [ ] Replace temporary wordmark/favicon with approved production-ready logo assets.
+- [ ] Owner review of the implemented homepage and shared shell before expanding into connected commerce features.
