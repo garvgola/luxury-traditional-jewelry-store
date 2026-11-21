@@ -21,6 +21,7 @@ const availabilitySchema=z.object({
 });
 const archiveSchema=z.object({productId:z.string().uuid()});
 const taxSchema=z.object({variantId:z.string().uuid(),hsnCode:z.string().trim().regex(/^[0-9]{4,8}$/),gstRateBps:z.number().int().min(0).max(2800),priceIncludesTax:z.boolean()});
+const priceSchema=z.object({variantId:z.string().uuid(),pricePaise:z.number().int().min(1).max(1000000000),sku:z.string().trim().max(80).optional(),variantLabel:z.string().trim().min(1).max(100).optional()});
 
 async function adminClient(){
   const supabase=await createClient();
@@ -70,9 +71,17 @@ export async function PATCH(request:Request){
     return NextResponse.json({success:true});
   }
   const tax=taxSchema.safeParse(payload);
-  if(!tax.success)return NextResponse.json({error:"Enter a valid HSN code, GST rate and tax treatment."},{status:400});
-  const {error}=await supabase.from("product_variants").update({hsn_code:tax.data.hsnCode,gst_rate_bps:tax.data.gstRateBps,price_includes_tax:tax.data.priceIncludesTax}).eq("id",tax.data.variantId);
-  if(error)return NextResponse.json({error:"Could not update product tax details."},{status:500});
+  if(tax.success){
+    const {error}=await supabase.from("product_variants").update({hsn_code:tax.data.hsnCode,gst_rate_bps:tax.data.gstRateBps,price_includes_tax:tax.data.priceIncludesTax}).eq("id",tax.data.variantId);
+    if(error)return NextResponse.json({error:"Could not update product tax details."},{status:500});
+    return NextResponse.json({success:true});
+  }
+  const price=priceSchema.safeParse(payload);
+  if(!price.success)return NextResponse.json({error:"Enter valid variant name, SKU and price."},{status:400});
+  const {variantId,pricePaise,sku,variantLabel}=price.data;
+  const update={price_paise:pricePaise,sku:sku?.trim()||null,variant_label:variantLabel?.trim()};
+  const {error}=await supabase.from("product_variants").update(update).eq("id",variantId);
+  if(error)return NextResponse.json({error:"Could not update product variant."},{status:500});
   return NextResponse.json({success:true});
 }
 

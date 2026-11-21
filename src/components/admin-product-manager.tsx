@@ -3,12 +3,14 @@
 import { FormEvent,useState } from "react";
 import { AdminProductImageUpload } from "@/components/admin-product-image-upload";
 import { AdminVariantTaxEditor } from "@/components/admin-variant-tax-editor";
+import { AdminVariantPriceEditor } from "@/components/admin-variant-price-editor";
+import { AdminProductImageManager } from "@/components/admin-product-image-manager";
 
 type Availability="available_to_order"|"made_to_order"|"temporarily_unavailable";
 type AdminCategory={id:string;name:string;is_active:boolean};
 type AdminProduct={
   id:string;name:string;slug:string;description:string|null;status:string;
-  product_images:{id:string;storage_path:string;alt_text:string;sort_order:number}[];
+  product_images:{id:string;storage_path:string;alt_text:string;sort_order:number;imageUrl?:string}[];
   product_variants:{
     id:string;variant_label:string;sku:string|null;price_paise:number;is_active:boolean;hsn_code:string|null;gst_rate_bps:number|null;price_includes_tax:boolean|null;
     product_availability:{availability:Availability}[]|{availability:Availability}|null;
@@ -71,12 +73,13 @@ export function AdminProductManager({products:initial,categories}:{products:Admi
       <button className="button button-primary" disabled={busy}>{busy?"Saving…":"Create product"}</button>
     </form>
     <div className="admin-product-list"><h2>Catalogue</h2>{products.length===0?<p>No products have been added yet.</p>:products.map(product=><article className="admin-product-row" key={product.id}>
-      <div><strong>{product.name}</strong><small>/{product.slug} · {product.status}</small><AdminProductImageUpload productId={product.id}/>
+      <div><strong>{product.name}</strong><small>/{product.slug} · {product.status}</small><AdminProductImageUpload productId={product.id}/><AdminProductImageManager images={product.product_images}/>
         {product.product_variants.map(variant=>{
           const availabilityRow=variant.product_availability;
           const current=Array.isArray(availabilityRow)?availabilityRow[0]?.availability:availabilityRow?.availability;
           return <div className="admin-variant-row" key={variant.id}><span>{money(variant.price_paise)} · {variant.variant_label}</span><select value={current||"available_to_order"} onChange={event=>void updateAvailability(variant.id,event.target.value as Availability)}>{Object.entries(availabilityLabel).map(([value,label])=><option key={value} value={value}>{label}</option>)}</select></div>;
         })}
+        {product.product_variants.map(variant=><AdminVariantPriceEditor key={variant.id} variantId={variant.id} pricePaise={variant.price_paise} sku={variant.sku} variantLabel={variant.variant_label}/>)}
         {product.product_variants.map(variant=><AdminVariantTaxEditor key={variant.id} variantId={variant.id} hsnCode={variant.hsn_code} gstRateBps={variant.gst_rate_bps} priceIncludesTax={variant.price_includes_tax}/>)}
       </div>
       {product.status!=="archived"&&<button className="admin-archive" onClick={()=>void archive(product.id)}>Archive</button>}
