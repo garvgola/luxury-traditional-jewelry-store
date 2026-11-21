@@ -2,6 +2,10 @@ import Link from "next/link";
 import { SectionHeading } from "@/components/section-heading";
 import { createClient } from "@/lib/supabase/server";
 
+type ProductCardRow = {
+  id: string; name: string; slug: string; description: string | null;
+  product_variants: { id: string; price_paise: number; is_active: boolean }[];
+};
 const money=(paise:number)=>new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:0}).format(paise/100);
 
 export default async function CollectionsPage() {
@@ -13,8 +17,8 @@ export default async function CollectionsPage() {
   return <section className="page-section collection-page">
     <SectionHeading eyebrow="Explore the edit" title="The collections" description="Discover pieces shaped by heritage, detail and a contemporary point of view." />
     {error ? <p className="simple-page-note">We could not load the collection just now. Please try again later.</p> : !products?.length ? <div className="empty-state"><span className="empty-ornament">✧</span><h2>Something beautiful is taking shape</h2><p>Our first collection will appear here as soon as the verified catalogue is published.</p></div> :
-    <div className="product-grid">{products.map((product:any)=>{
-      const variant=product.product_variants?.find((v:any)=>v.is_active);
+    <div className="product-grid">{(products as unknown as ProductCardRow[]).map((product)=>{
+      const variant=product.product_variants?.find((v)=>v.is_active);
       return <Link href={`/products/${product.slug}`} className="product-card" key={product.id}>
         <div className="product-card-art"><span>✧</span><small>NAMO NAMO JEWELS</small></div>
         <div className="product-card-meta"><h3>{product.name}</h3>{variant&&<strong>{money(variant.price_paise)}</strong>}</div>
