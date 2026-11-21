@@ -15,7 +15,7 @@ The integrated foundation currently includes:
 - Authenticated sign-up/sign-in scaffolding and customer account view.
 - Catalogue reads, product detail route and authenticated cart API/UI.
 
-The customer-experience branch is under CI review. Supabase migration execution, live authentication, product media, checkout, Razorpay, admin workflows, end-to-end tests and deployment remain incomplete.
+The customer experience and admin foundations have been merged into `develop`. Shipping-zone administration and secure shipping estimates are in the current review workstream. Supabase migration execution, live authentication, product media, checkout, Razorpay, admin workflows, end-to-end tests and deployment remain incomplete.
 
 ## Technology
 
