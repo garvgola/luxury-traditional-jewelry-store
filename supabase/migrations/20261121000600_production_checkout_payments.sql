@@ -323,4 +323,70 @@ $fn$;
 revoke all on function public.mark_razorpay_payment_failed(text,text,bigint,text,text) from public,anon,authenticated;
 grant execute on function public.mark_razorpay_payment_failed(text,text,bigint,text,text) to service_role;
 
+
+alter table public.orders
+  add column if not exists shipping_carrier text,
+  add column if not exists tracking_number text,
+  add column if not exists shipped_at timestamptz,
+  add column if not exists delivered_at timestamptz;
+
+create or replace function public.admin_update_order_fulfilment(
+  p_order_id uuid,
+  p_new_status public.order_status,
+  p_shipping_carrier text default null,
+  p_tracking_number text default null
+)
+returns void
+language plpgsql
+security definer
+set search_path = ''
+as $fn$
+declare
+  v_order public.orders%rowtype;
+  v_actor uuid := (select auth.uid());
+begin
+  if v_actor is null or not public.has_role('admin') then
+    raise exception 'Administrator access required';
+  end if;
+  select * into v_order from public.orders where id=p_order_id for update;
+  if not found then raise exception 'Order not found'; end if;
+
+  if not (
+    (v_order.status='paid' and p_new_status='processing')
+    or (v_order.status='processing' and p_new_status='shipped')
+    or (v_order.status='shipped' and p_new_status='delivered')
+  ) then
+    raise exception 'Invalid order status transition';
+  end if;
+  if p_new_status='shipped' and (
+    p_shipping_carrier is null or length(trim(p_shipping_carrier))<2
+    or length(trim(p_shipping_carrier))>100
+    or p_tracking_number is null or length(trim(p_tracking_number))<3
+    or length(trim(p_tracking_number))>120
+  ) then
+    raise exception 'Carrier and tracking number are required before shipping';
+  end if;
+
+  update public.orders set
+    status=p_new_status,
+    shipping_carrier=case when p_new_status='shipped' then trim(p_shipping_carrier) else shipping_carrier end,
+    tracking_number=case when p_new_status='shipped' then trim(p_tracking_number) else tracking_number end,
+    shipped_at=case when p_new_status='shipped' then now() else shipped_at end,
+    delivered_at=case when p_new_status='delivered' then now() else delivered_at end
+  where id=p_order_id;
+
+  insert into public.order_status_history(order_id,from_status,to_status,actor_id,note)
+  values(p_order_id,v_order.status,p_new_status,v_actor,
+    case p_new_status when 'processing' then 'Order processing started'
+      when 'shipped' then 'Order handed to carrier' else 'Order marked delivered' end);
+  insert into public.admin_audit_logs(actor_id,action,entity_table,entity_id,before_data,after_data)
+  values(v_actor,'order.fulfilment.update','orders',p_order_id,
+    jsonb_build_object('status',v_order.status),
+    jsonb_build_object('status',p_new_status,'shipping_carrier',case when p_new_status='shipped' then trim(p_shipping_carrier) else v_order.shipping_carrier end,
+      'tracking_number',case when p_new_status='shipped' then trim(p_tracking_number) else v_order.tracking_number end));
+end;
+$fn$;
+revoke all on function public.admin_update_order_fulfilment(uuid,public.order_status,text,text) from public,anon;
+grant execute on function public.admin_update_order_fulfilment(uuid,public.order_status,text,text) to authenticated;
+
 commit;
