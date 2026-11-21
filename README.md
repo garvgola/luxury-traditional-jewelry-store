@@ -1,69 +1,101 @@
 # NAMO NAMO jewels
 
-A heritage-fusion Indian jewellery storefront built with Next.js, TypeScript, Tailwind CSS, Supabase/PostgreSQL and Razorpay (payment integration is not yet enabled).
+A heritage-fusion Indian jewellery e-commerce storefront built with Next.js, TypeScript, Tailwind CSS, Supabase/PostgreSQL and Supabase Storage. Razorpay integration is planned but is not enabled.
 
 ## Current delivery status
 
-**Development branch:** `develop`  
-**Active workstream:** Customer experience  
-**Release state:** Development only — not production ready.
+**Repository:** `garvgola/luxury-traditional-jewelry-store`  
+**Integrated branch:** `develop`  
+**Release state:** Development foundation implemented; not production ready.
 
-The integrated foundation currently includes:
-- Responsive Next.js storefront shell and heritage-fusion design system.
-- Supabase/PostgreSQL schema proposal implemented as a migration with Row Level Security policies.
-- Customer profiles, addresses, catalogue, product variants, owner-managed availability, carts, wishlists, orders, payments, shipping zones/rates and audit records.
-- Authenticated sign-up/sign-in scaffolding and customer account view.
-- Catalogue reads, product detail route and authenticated cart API/UI.
+### Implemented in `develop`
 
-The customer experience and admin foundations have been merged into `develop`. Shipping-zone administration and secure shipping estimates are in the current review workstream. Supabase migration execution, live authentication, product media, checkout, Razorpay, admin workflows, end-to-end tests and deployment remain incomplete.
+- Responsive heritage-fusion storefront shell and approved design direction.
+- Supabase browser/server clients, session refresh, sign-up, sign-in, email confirmation and sign-out.
+- Customer account, saved wishlist, persistent cart and delivery-address CRUD.
+- Database-backed product catalogue, product detail, category pages and product search.
+- Admin role gate, dashboard metrics, product creation, availability management, product archive and category management.
+- Admin-managed shipping zones/rates and server-side shipping estimates.
+- Private product-media bucket design, admin-only uploads and signed image URLs for published products.
+- GitHub Actions CI: dependency install, TypeScript, ESLint, production build and Playwright browser smoke tests.
+
+## Not yet production-ready
+
+- No Supabase project has been configured in this development environment; migrations have not been applied to a live database.
+- Authentication, RLS, storage policies, cart, wishlist, address and shipping operations have not been runtime-tested against a Supabase instance.
+- No owner catalogue records or approved jewellery photography have been supplied. The site uses honest empty states and neutral placeholders until real products are entered.
+- Checkout currently provides a shipping estimate only. It does not create orders or collect payments.
+- GST/tax and invoice treatment need owner/accountant confirmation before calculating a final payable amount.
+- Razorpay order creation, signature verification, webhook processing, refunds and customer notifications are not yet implemented.
+- Admin order fulfilment updates, product variant editing, image ordering/alt-text editing and complete sales reporting remain outstanding.
+- Full end-to-end checkout, security, accessibility and performance testing remains outstanding.
+- No Vercel deployment or production URL has been verified.
 
 ## Technology
 
 - Next.js 15, React 19, TypeScript
 - Tailwind CSS
-- Supabase Auth, PostgreSQL and Storage (Storage bucket/policies still to be configured)
+- Supabase Auth, PostgreSQL and Storage
 - Zod validation
-- Razorpay (planned; no live payment activation)
-- GitHub Actions CI with Playwright browser smoke tests
-- Vercel (deployment not yet configured)
+- Playwright browser smoke tests
+- GitHub Actions CI
+- Vercel deployment target (not configured)
 
 ## Local development
 
 1. Install Node.js 22 or later.
-2. Install dependencies: `npm install`.
+2. Run `npm install`.
 3. Copy `.env.example` to `.env.local`.
-4. Configure the Supabase project URL and anon/publishable key.
-5. Start the app: `npm run dev`.
+4. Configure the Supabase URL and publishable/anon key.
+5. Run `npm run dev`.
 
-The public storefront can render without credentials, but authentication, catalogue reads and cart operations require a configured Supabase project and the reviewed migration.
+Without Supabase credentials, public pages render their configuration/empty states; authentication and database-backed actions will not work.
 
-## Supabase setup
+## Supabase development setup
 
-1. Create a development Supabase project (not production).
-2. Configure the variables in `.env.local`.
-3. Review `supabase/migrations/20261121000100_backend_foundation.sql`.
-4. Apply the migration to the development project with the Supabase CLI.
-5. Run `supabase test db` after enabling pgTAP.
-6. Configure product media storage and policies before uploading catalogue images.
+Apply migrations in this order to a disposable **development** Supabase project:
 
-Do not commit `.env.local`, service-role keys, payment secrets or customer data.
+1. `20261121000100_backend_foundation.sql`
+2. `20261121000200_default_customer_address.sql`
+3. `20261121000300_admin_product_creation.sql`
+4. `20261121000400_product_media_storage.sql`
+5. `20261121000500_seed_store_categories.sql`
 
-## Business rules for release one
+Then:
+- Run the pgTAP tests in `supabase/tests`.
+- Create the owner account and grant the admin role using `docs/backend/ADMIN_BOOTSTRAP.md`.
+- Configure `SUPABASE_SERVICE_ROLE_KEY` server-side only for shipping quote execution.
+- Configure owner-managed shipping zones/rates in `/admin/shipping`.
+- Upload owner-approved product images in `/admin/products`.
+
+Never commit `.env.local`, service-role keys, Razorpay secrets or customer data.
+
+## Release-one business rules
 
 - Public browsing is allowed; sign-in is required before checkout.
 - Product availability is manually managed; there is no quantity inventory or automatic stock decrement.
-- Shipping is owner-configured by postal-code zone and subtotal threshold. Delivery windows are indicative.
-- No courier API, returns/refunds workflow or guest checkout in release one.
-- INR amounts are stored as integer paise.
-- Checkout and payment status must be server-authoritative.
+- Shipping is configured by postal-code zone and subtotal threshold; delivery windows are indicative.
+- No courier API, guest checkout, returns/refunds workflow or automatic fulfilment in release one.
+- INR monetary values are integer paise.
+- Prices, tax, shipping, orders and payment state must be calculated/verified server-side.
 - Live Razorpay payments and production deployment require explicit owner approval.
 
-## Engineering safeguards
+## Security rules
 
-- Enforce customer ownership and administrator access on the server and through RLS.
+- Enforce customer ownership and administrator access server-side and through RLS.
 - Never expose the Supabase service-role key to the browser.
-- Verify Razorpay signatures and webhooks on the server before marking an order paid.
-- Never trust client-submitted prices, totals, stock or payment status.
-- Do not claim a migration, test, payment or deployment succeeded until it has been executed and verified.
+- Only published product images are publicly readable; uploads require admin access.
+- Verify Razorpay signatures and webhooks before marking an order paid.
+- Never trust client-submitted prices, totals, inventory or payment status.
+- Do not claim migrations, tests, payments or deployment succeeded until executed and verified.
 
-See `PROJECT_STATUS.md`, `ARCHITECTURE.md`, `DATABASE_SCHEMA.md`, `API_CONTRACTS.md`, `DESIGN_SYSTEM.md`, `SECURITY_STANDARDS.md` and `docs/backend/README.md` for the current implementation contracts and limitations.
+## Project documentation
+
+- `PROJECT_STATUS.md`
+- `ARCHITECTURE.md`
+- `DATABASE_SCHEMA.md`
+- `API_CONTRACTS.md`
+- `DESIGN_SYSTEM.md`
+- `SECURITY_STANDARDS.md`
+- `docs/backend/ADMIN_BOOTSTRAP.md`
+- `docs/backend/PRODUCT_MEDIA.md`
