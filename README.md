@@ -61,6 +61,7 @@ Apply migrations in this order to a disposable **development** Supabase project:
 4. `20261121000400_product_media_storage.sql`
 5. `20261121000500_seed_store_categories.sql`
 6. `20261121000600_production_checkout_payments.sql`
+7. `20261121000700_admin_product_variants.sql`
 
 Then:
 - Run the pgTAP tests in `supabase/tests`.

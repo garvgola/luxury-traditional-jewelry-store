@@ -22,6 +22,7 @@ const availabilitySchema=z.object({
 const archiveSchema=z.object({productId:z.string().uuid()});
 const taxSchema=z.object({variantId:z.string().uuid(),hsnCode:z.string().trim().regex(/^[0-9]{4,8}$/),gstRateBps:z.number().int().min(0).max(2800),priceIncludesTax:z.boolean()});
 const priceSchema=z.object({variantId:z.string().uuid(),pricePaise:z.number().int().min(1).max(1000000000),sku:z.string().trim().max(80).optional(),variantLabel:z.string().trim().min(1).max(100).optional()});
+const productSchema=z.object({productId:z.string().uuid(),name:z.string().trim().min(2).max(120),slug:z.string().trim().min(2).max(140).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),description:z.string().trim().max(5000),categoryId:z.string().uuid().nullable()});
 
 async function adminClient(){
   const supabase=await createClient();
@@ -77,11 +78,18 @@ export async function PATCH(request:Request){
     return NextResponse.json({success:true});
   }
   const price=priceSchema.safeParse(payload);
-  if(!price.success)return NextResponse.json({error:"Enter valid variant name, SKU and price."},{status:400});
-  const {variantId,pricePaise,sku,variantLabel}=price.data;
-  const update={price_paise:pricePaise,sku:sku?.trim()||null,variant_label:variantLabel?.trim()};
-  const {error}=await supabase.from("product_variants").update(update).eq("id",variantId);
-  if(error)return NextResponse.json({error:"Could not update product variant."},{status:500});
+  if(price.success){
+    const {variantId,pricePaise,sku,variantLabel}=price.data;
+    const update={price_paise:pricePaise,sku:sku?.trim()||null,variant_label:variantLabel?.trim()};
+    const {error}=await supabase.from("product_variants").update(update).eq("id",variantId);
+    if(error)return NextResponse.json({error:"Could not update product variant."},{status:500});
+    return NextResponse.json({success:true});
+  }
+  const product=productSchema.safeParse(payload);
+  if(!product.success)return NextResponse.json({error:"Enter valid product name, URL slug, description and category."},{status:400});
+  const {productId,name,slug,description,categoryId}=product.data;
+  const {error}=await supabase.from("products").update({name,slug,description:description||null,category_id:categoryId}).eq("id",productId);
+  if(error)return NextResponse.json({error:error.message.includes("duplicate")?"That product URL slug already exists.":"Could not update product details."},{status:400});
   return NextResponse.json({success:true});
 }
 

@@ -47,7 +47,7 @@
 ## External configuration and runtime verification still required
 
 - [ ] Create a disposable development Supabase project and configure `.env.local`.
-- [ ] Apply migrations 00100 through 00500 in order.
+- [ ] Apply migrations 00100 through 00700 in order.
 - [ ] Run pgTAP database tests; they have not been executed against a Supabase instance.
 - [ ] Create the owner Auth account and grant the `admin` role using `docs/backend/ADMIN_BOOTSTRAP.md`.
 - [ ] Configure the server-only Supabase service-role key.
@@ -55,7 +55,7 @@
 - [ ] Configure shipping zones/rates and test the quote endpoint with real test addresses.
 - [ ] Add real catalogue records and owner-approved product photography.
 - [x] Production checkout/payment code added on `feature/production-checkout-payments`: atomic order snapshot, idempotency, Razorpay order creation, signature verification, captured/failed webhook reconciliation and customer order detail.
-- [ ] Apply migration 006 and run pgTAP against development Supabase.
+- [ ] Apply migrations 006 and 007 and run pgTAP against development Supabase.
 - [ ] Configure Razorpay test keys/webhook and validate successful, failed, duplicate and delayed events.
 - [ ] Confirm GST/HSN, seller registration, state/place-of-supply, freight tax, invoice numbering and price-inclusion treatment with owner/accountant.
 - [x] Razorpay order creation, HMAC/API payment verification, signed captured/failed webhook reconciliation and idempotent order updates added on `feature/production-checkout-payments`.
@@ -64,7 +64,8 @@
 - [ ] Apply migration 006 and run pgTAP against development Supabase.
 - [ ] Verify Razorpay test payments, failed payments, duplicate/delayed webhooks and payment reconciliation against merchant test credentials.
 - [ ] Complete checkout, order confirmation, email notifications and order history testing.
-- [ ] Complete refunds/cancellations, product variant price editing, image ordering and remaining management workflows.
+- [x] Product variant creation/selection, price/SKU editing, image ordering/alt-text management and security headers added on `feature/product-variants`.
+- [ ] Complete refunds/cancellations, image alt-text moderation, transactional email notifications and remaining management workflows.
 - [ ] Run full browser, accessibility, security and performance testing.
 - [ ] Configure Vercel and verify a deployment before claiming a live URL.
 

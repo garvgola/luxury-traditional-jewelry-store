@@ -1,7 +1,7 @@
 -- Run with: supabase test db
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(40);
+select plan(42);
 
 select has_table('public', 'profiles', 'profiles table exists');
 select has_table('public', 'customer_addresses', 'customer addresses table exists');
@@ -53,5 +53,7 @@ select has_column('public','orders','shipping_carrier','orders store carrier det
 select has_column('public','orders','tracking_number','orders store shipment tracking numbers');
 select ok(to_regprocedure('public.admin_update_order_fulfilment(uuid,public.order_status,text,text)') is not null,'audited admin fulfilment transition function exists');
 select ok(not has_function_privilege('anon','public.admin_update_order_fulfilment(uuid,public.order_status,text,text)','execute'),'anonymous users cannot update fulfilment');
+select ok(to_regprocedure('public.admin_add_product_variant(uuid,text,text,bigint,public.product_availability_status,text,integer,boolean)') is not null,'admin product variant creation function exists');
+select ok(not has_function_privilege('anon','public.admin_add_product_variant(uuid,text,text,bigint,public.product_availability_status,text,integer,boolean)','execute'),'anonymous users cannot create product variants');
 select * from finish();
 rollback;
