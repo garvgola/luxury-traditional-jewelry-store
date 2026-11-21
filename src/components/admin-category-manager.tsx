@@ -10,7 +10,7 @@ export function AdminCategoryManager({initial}:{initial:Category[]}){
   async function create(event:FormEvent<HTMLFormElement>){
     event.preventDefault();setBusy(true);setError("");setMessage("");
     try{
-      const response=await fetch("/api/admin/categories",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,slug,description,sortOrder:categories.length})});
+      const response=await fetch("/api/admin/categories",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,slug,description,sortOrder:(categories.length+1)*10})});
       const result=await response.json();if(!response.ok)throw new Error(result.error);
       setMessage("Category created.");window.location.reload();
     }catch(cause){setError(cause instanceof Error?cause.message:"Could not create category.");}
