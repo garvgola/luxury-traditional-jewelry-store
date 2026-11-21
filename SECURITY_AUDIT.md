@@ -16,12 +16,16 @@
 - Supabase service-role key is loaded only by a server-only module for the restricted shipping quote RPC.
 - Product-media bucket is private; uploads require admin authorization and public reads are restricted to images linked to active products.
 - Zod validation is used on key write APIs.
-- Checkout does not create orders or claim successful payments while tax/payment setup is incomplete.
+- Checkout creates server-side order snapshots only after per-product HSN/GST configuration and shipping are present.
+- Razorpay payment callback signatures are HMAC-verified and the provider payment resource is fetched to verify order, amount, currency and captured status.
+- Signed webhook events reconcile captured/failed payment states with event-ID idempotency.
+- Admin fulfilment changes use an admin-checked database function, explicit status transitions and audit history.
 
 ## Findings and limitations
 
 1. **Critical — runtime authorization unverified.** Migrations have not been applied to a Supabase project; RLS behavior is not proven.
-2. **High — payment surface incomplete.** Razorpay order creation, signature verification, webhook verification, replay/idempotency and refund flows are not implemented.
+2. **High — payment runtime unverified.** Razorpay order creation, signature verification and webhook reconciliation are implemented in code, but no merchant test credentials or webhook have been configured and no runtime payment test has been performed.
+3. **High — tax/invoice compliance incomplete.** Product GST rate and inclusive/exclusive treatment are configurable, but GSTIN, seller state, place-of-supply split, freight tax and invoice requirements remain unconfirmed. Do not enable live payment until reviewed.
 3. **High — admin bootstrap required.** Owner account must be explicitly granted the admin role through a trusted Supabase SQL session.
 4. **High — service-role secret required.** Shipping quote code requires a server-only key; environment isolation has not been verified in Vercel.
 5. **Medium — storage policies unverified.** Private bucket policies and signed URLs need anonymous/customer/admin permission tests.
