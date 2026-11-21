@@ -141,3 +141,25 @@ Use a calm, confident, craftsmanship-led tone. Product descriptions should state
 ## 10. Implementation handoff
 
 Agent 2 should translate these tokens into CSS variables/design tokens and reusable components. Agent 1 should review screenshots and responsive behavior before Phase 1 is marked complete. Exact font licensing, final logo, photography, and store name remain owner inputs.
+
+
+## 11. Brand identity decisions (owner-confirmed 2026-11-21)
+
+- Store/brand name: **NAMO NAMO jewels**. Preserve this exact spelling and capitalization in brand references unless the owner supplies an official lockup with a different typographic treatment.
+- Primary visual direction: **Heritage fusion** — traditional Indian jewellery cues and craftsmanship-led storytelling combined with contemporary luxury layouts and restrained interface patterns.
+- Logo: owner already has a logo. Use the supplied official asset as the source of truth; do not redraw, recreate, approximate, or alter the mark without permission. Until the asset is supplied, use a neutral text placeholder reading “NAMO NAMO jewels” in design previews only.
+
+### Refined visual expression
+
+- Keep the established deep burgundy, antique gold, ivory, champagne beige, and muted earthy palette.
+- Use traditional motifs (e.g. jaali geometry, subtle floral/arch references, heritage-inspired borders) sparingly as supporting details, not as dense background decoration.
+- Pair editorial serif headlines with modern sans-serif navigation, forms, and product metadata.
+- Product imagery remains the hero. Use generous whitespace, clear hierarchy, restrained ornament, and contemporary grid systems.
+- The overall impression should be rooted in Indian heritage but polished, readable, and current—not a wedding invitation or heavily ornamental template.
+
+### Logo handling and asset requirements
+
+- Request the original logo file in SVG or high-resolution transparent PNG if available.
+- Preserve aspect ratio, clear space, original colors, and minimum readable size according to the supplied artwork.
+- Create light/dark background variants only if the owner provides approved assets or explicitly authorizes adaptation.
+- Do not add effects, gradients, outlines, or recolor the logo without approval.
