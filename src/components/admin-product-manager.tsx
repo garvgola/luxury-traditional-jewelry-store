@@ -2,6 +2,7 @@
 
 import { FormEvent,useState } from "react";
 import { AdminProductImageUpload } from "@/components/admin-product-image-upload";
+import { AdminVariantTaxEditor } from "@/components/admin-variant-tax-editor";
 
 type Availability="available_to_order"|"made_to_order"|"temporarily_unavailable";
 type AdminCategory={id:string;name:string;is_active:boolean};
@@ -9,7 +10,7 @@ type AdminProduct={
   id:string;name:string;slug:string;description:string|null;status:string;
   product_images:{id:string;storage_path:string;alt_text:string;sort_order:number}[];
   product_variants:{
-    id:string;variant_label:string;sku:string|null;price_paise:number;is_active:boolean;
+    id:string;variant_label:string;sku:string|null;price_paise:number;is_active:boolean;hsn_code:string|null;gst_rate_bps:number|null;price_includes_tax:boolean|null;
     product_availability:{availability:Availability}[]|{availability:Availability}|null;
   }[];
 };
@@ -74,6 +75,14 @@ export function AdminProductManager({products:initial,categories}:{products:Admi
           const availabilityRow=variant.product_availability;
           const current=Array.isArray(availabilityRow)?availabilityRow[0]?.availability:availabilityRow?.availability;
           return <div className="admin-variant-row" key={variant.id}><span>{money(variant.price_paise)} · {variant.variant_label}</span><select value={current||"available_to_order"} onChange={event=>void updateAvailability(variant.id,event.target.value as Availability)}>{Object.entries(availabilityLabel).map(([value,label])=><option key={value} value={value}>{label}</option>)}</select></div>;
+        })}
+        {product.product_variants.map(variant=><AdminVariantTaxEditor key={variant.id} variantId={variant.id} hsnCode={variant.hsn_code} gstRateBps={variant.gst_rate_bps} priceIncludesTax={variant.price_includes_tax}/>)}
+      </div>
+      {product.status!=="archived"&&<button className="admin-archive" onClick={()=>void archive(product.id)}>Archive</button>}
+    </article>)}</div>
+  </div>;
+}
+
         })}
       </div>
       {product.status!=="archived"&&<button className="admin-archive" onClick={()=>void archive(product.id)}>Archive</button>}
