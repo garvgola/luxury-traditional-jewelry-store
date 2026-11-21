@@ -1,64 +1,40 @@
 # Test Report
 
-**Current state:** CI-validated code; runtime integration tests remain incomplete.
+**Current state:** CI-validated application code; runtime integration tests remain incomplete.
 
 ## Automated CI
 
-The GitHub Actions workflow runs:
-1. Dependency installation.
-2. TypeScript type-check.
-3. ESLint.
-4. Production build.
-5. Chromium installation.
-6. Playwright browser smoke tests.
+GitHub Actions runs dependency installation, TypeScript, ESLint, production build, Chromium installation and Playwright browser smoke tests.
 
-Feature pull requests #8–#17 passed their required CI checks before merge. The post-merge `develop` workflow is checked separately; do not treat a pending run as a pass.
+Feature PRs #8–#21 passed their required checks before merge. The latest post-merge develop workflow must also complete successfully.
 
 ## Playwright smoke coverage
 
 - Homepage hero and primary navigation.
-- Catalogue configuration/empty state when Supabase credentials are absent.
-- Sign-in form.
-- Registration form.
-- Cart backend-unconfigured state (ensures no false success).
+- Catalogue configuration/empty state when Supabase is not configured.
+- Checkout configuration empty state.
+- Sign-in and registration screens.
+- Cart backend-unconfigured state.
 - Mobile navigation and account link.
+- Production security headers.
 
-## Added checkout/payment code (not runtime-verified)
+## Added but not runtime-tested against external services
 
-- Atomic server-side order snapshot with customer idempotency.
-- Product HSN/GST configuration and server-side total calculation.
-- Razorpay order creation with a short-lived payment claim.
-- Payment signature verification and provider API confirmation.
-- Signed webhook reconciliation for captured/failed events and duplicate event IDs.
-- Customer order detail/confirmation view.
+- Supabase migrations 00100–00700 and pgTAP assertions.
+- Authentication/email confirmation and customer RLS isolation.
+- Cart, wishlist, address and product/category/variant CRUD.
+- Private media upload, signed reads, image ordering and deletion.
+- Shipping quotes with real configured zones and PIN codes.
+- Razorpay order creation, payment API verification and signed captured/failed webhooks.
+- Admin fulfilment transitions and shipment tracking.
 
-These routes have not been exercised against Supabase or Razorpay test credentials. The pgTAP suite includes new permission/schema assertions, but has not been executed against a Supabase project.
+## Not yet tested or implemented
 
-## Added checkout/payment and fulfilment code (not runtime-verified)
+- Full checkout with Razorpay test credentials.
+- Refunds, partial refunds, cancellations, disputes and chargebacks.
+- Transactional email delivery and retry behavior.
+- GST invoice split, freight tax and legally reviewed invoice output.
+- Full accessibility, penetration/security, cross-browser, load and performance testing.
+- Vercel preview/production deployment and custom domain.
 
-- Product HSN/GST configuration, tax-inclusive/exclusive calculation and checkout blocking for incomplete tax metadata.
-- Atomic order creation, address/product/tax/shipping snapshots and idempotency.
-- Razorpay order creation, payment HMAC verification and provider API confirmation.
-- Signed webhook reconciliation for captured/failed events and duplicate event IDs.
-- Admin fulfilment status transitions and shipment tracking.
-- Customer order detail and shipment tracking view.
-
-These flows have not been exercised against Supabase or Razorpay test credentials. Migration 006 and pgTAP must be run in development before any payment testing.
-
-## Not yet tested
-
-- Supabase migrations and pgTAP.
-- Registration/email verification against a real Supabase project.
-- Customer RLS isolation.
-- Cart/wishlist/address database writes.
-- Product category and product CRUD against Supabase.
-- Storage upload and signed-read policies.
-- Shipping quote against real zones/rates.
-- Checkout/order creation.
-- Razorpay test payment, signature and webhook flows.
-- Admin order fulfilment/refunds.
-- Cross-browser, accessibility, load and performance tests.
-
-## Acceptance
-
-A CI pass proves static checks/build and the listed smoke tests only. It does not prove that external services, database policies, payments or deployment are operational.
+A CI pass proves static checks/build and listed smoke tests only. It does not prove external services, database policies, payments or deployment are operational.
