@@ -54,8 +54,11 @@
 - [ ] Test authentication, customer RLS isolation, cart, wishlist, address CRUD, admin authorization and storage policies against the development project.
 - [ ] Configure shipping zones/rates and test the quote endpoint with real test addresses.
 - [ ] Add real catalogue records and owner-approved product photography.
-- [ ] Confirm GST/tax, price-inclusion and invoice treatment with the owner/accountant.
-- [ ] Implement Razorpay test order creation, signature verification, webhook verification and idempotent payment/order updates.
+- [x] Production checkout/payment code added on `feature/production-checkout-payments`: atomic order snapshot, idempotency, Razorpay order creation, signature verification, captured/failed webhook reconciliation and customer order detail.
+- [ ] Apply migration 006 and run pgTAP against development Supabase.
+- [ ] Configure Razorpay test keys/webhook and validate successful, failed, duplicate and delayed events.
+- [ ] Confirm GST/HSN, seller registration, state/place-of-supply, freight tax, invoice numbering and price-inclusion treatment with owner/accountant.
+- [ ] Verify Razorpay test order creation, signature verification, webhook verification and idempotent payment/order updates against merchant test credentials.
 - [ ] Complete checkout, order confirmation, email notifications and order history testing.
 - [ ] Complete admin order fulfilment, product variant editing, image ordering and remaining management workflows.
 - [ ] Run full browser, accessibility, security and performance testing.
@@ -66,7 +69,7 @@
 - Supabase credentials are not available in this development environment. Code and CI are validated, but live database-backed flows are not yet runtime-verified.
 - The database migration and pgTAP suite have not been applied/executed against a real Supabase project.
 - No real product catalogue or owner-approved product photography has been supplied; no products or sales data are fabricated.
-- Checkout is deliberately restricted to shipping estimates. Tax/GST and invoice policy are unresolved, and Razorpay integration is not implemented.
+- Checkout/payment code is implemented but must remain inactive until Supabase migration 006, test credentials, tax/invoice rules and webhook runtime tests are completed. The GST split/invoice engine, refunds and order fulfilment remain outstanding.
 - No production deployment exists or has been verified.
 
 ## Confirmed release-one business rules
