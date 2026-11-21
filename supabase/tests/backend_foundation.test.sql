@@ -1,7 +1,7 @@
 -- Run with: supabase test db
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(36);
+select plan(40);
 
 select has_table('public', 'profiles', 'profiles table exists');
 select has_table('public', 'customer_addresses', 'customer addresses table exists');
@@ -49,5 +49,9 @@ select has_column('public','orders','tax_breakdown','orders store tax calculatio
 select has_column('public','order_items','hsn_code_snapshot','order items snapshot HSN classification');
 select ok(to_regprocedure('public.mark_razorpay_payment_failed(text,text,bigint,text,text)') is not null,'failed payment reconciliation function exists');
 select ok(not has_function_privilege('authenticated','public.mark_razorpay_payment_failed(text,text,bigint,text,text)','execute'),'customers cannot alter payment failure state');
+select has_column('public','orders','shipping_carrier','orders store carrier details');
+select has_column('public','orders','tracking_number','orders store shipment tracking numbers');
+select ok(to_regprocedure('public.admin_update_order_fulfilment(uuid,public.order_status,text,text)') is not null,'audited admin fulfilment transition function exists');
+select ok(not has_function_privilege('anon','public.admin_update_order_fulfilment(uuid,public.order_status,text,text)','execute'),'anonymous users cannot update fulfilment');
 select * from finish();
 rollback;
