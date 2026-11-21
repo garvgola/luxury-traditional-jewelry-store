@@ -11,6 +11,9 @@ const createSchema=z.object({
   sku:z.string().trim().max(80).optional().default(""),
   variantLabel:z.string().trim().max(100).optional().default("Default"),
   availability:z.enum(["available_to_order","made_to_order","temporarily_unavailable"]),
+  hsnCode:z.string().trim().regex(/^[0-9]{4,8}$/),
+  gstRateBps:z.number().int().min(0).max(2800),
+  priceIncludesTax:z.boolean(),
 });
 const availabilitySchema=z.object({
   variantId:z.string().uuid(),
@@ -48,6 +51,7 @@ export async function POST(request:Request){
   const {data,error}=await supabase.rpc("admin_create_product",{
     p_name:p.name,p_slug:p.slug,p_description:p.description,p_category_id:p.categoryId,
     p_price_paise:p.pricePaise,p_sku:p.sku,p_variant_label:p.variantLabel,p_availability:p.availability,
+    p_hsn_code:p.hsnCode,p_gst_rate_bps:p.gstRateBps,p_price_includes_tax:p.priceIncludesTax,
   });
   if(error)return NextResponse.json({error:error.message.includes("duplicate")?"A product with this URL slug or SKU already exists.":"Could not create this product."},{status:400});
   return NextResponse.json({success:true,productId:data});
