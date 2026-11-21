@@ -65,3 +65,16 @@ See [Phase 0 GitHub issue #1](https://github.com/garvgola/luxury-traditional-jew
 1. How should shipping charges be calculated and displayed (fixed fee, free shipping, location-based, or confirmed manually before payment)?
 2. What exact product availability labels should customers see (e.g. available to order, made to order, temporarily unavailable)?
 3. What delivery estimate or lead-time wording should be displayed for demand-led procurement?
+
+
+## Shipping and delivery decisions recorded (2026-11-21)
+
+- [x] Shipping charge is location-based and managed through owner-configured rates/zones.
+- [x] Display an estimated delivery window; it is indicative, not guaranteed.
+- [x] Persist the applied shipping fee and estimate on the order so future configuration changes do not rewrite historical orders.
+
+## Updated checkout requirements
+
+- Checkout quote must calculate shipping from the delivery location on the server and display the complete payable total before payment.
+- Owner-managed shipping configuration is required; courier/carrier API integration is not.
+- Estimated delivery windows must be configurable and saved with the order.
