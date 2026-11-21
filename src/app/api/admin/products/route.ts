@@ -6,6 +6,7 @@ const createSchema=z.object({
   name:z.string().trim().min(2).max(120),
   slug:z.string().trim().min(2).max(140).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   description:z.string().trim().max(5000).optional().default(""),
+  categoryId:z.string().uuid().nullable().optional().default(null),
   pricePaise:z.number().int().positive().max(1000000000),
   sku:z.string().trim().max(80).optional().default(""),
   variantLabel:z.string().trim().max(100).optional().default("Default"),
@@ -45,7 +46,7 @@ export async function POST(request:Request){
   if(!parsed.success)return NextResponse.json({error:"Check the product details and price."},{status:400});
   const p=parsed.data;
   const {data,error}=await supabase.rpc("admin_create_product",{
-    p_name:p.name,p_slug:p.slug,p_description:p.description,p_category_id:null,
+    p_name:p.name,p_slug:p.slug,p_description:p.description,p_category_id:p.categoryId,
     p_price_paise:p.pricePaise,p_sku:p.sku,p_variant_label:p.variantLabel,p_availability:p.availability,
   });
   if(error)return NextResponse.json({error:error.message.includes("duplicate")?"A product with this URL slug or SKU already exists.":"Could not create this product."},{status:400});

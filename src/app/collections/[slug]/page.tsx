@@ -9,12 +9,10 @@ type ProductRow={
   product_images:{storage_path:string;alt_text:string;sort_order:number}[];
 };
 type ProductCard=ProductRow&{imageUrl?:string;imageAlt:string};
-const allowed=["new-arrivals","earrings","necklaces","bangles","rings"];
 const money=(paise:number)=>new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:0}).format(paise/100);
 
 export default async function CollectionPage({params}:{params:Promise<{slug:string}>}){
   const {slug}=await params;
-  if(!allowed.includes(slug))notFound();
   const supabase=await createClient();
   const fallbackTitle=slug.split("-").map(word=>word[0].toUpperCase()+word.slice(1)).join(" ");
   if(!supabase)return <section className="page-section collection-page"><SectionHeading eyebrow="NAMO NAMO jewels" title={fallbackTitle} description="The catalogue will appear once the store database is configured."/><div className="catalogue-empty"><span className="catalogue-empty-mark">✧</span><h2>The collection is taking shape.</h2><p>Verified products and product photography will appear here once published.</p></div></section>;
@@ -23,7 +21,8 @@ export default async function CollectionPage({params}:{params:Promise<{slug:stri
   let categoryId:string|null=null;
   if(slug!=="new-arrivals"){
     const {data:category}=await supabase.from("categories").select("id,name,description").eq("slug",slug).eq("is_active",true).maybeSingle();
-    if(category){title=category.name;categoryId=category.id;}
+    if(!category)notFound();
+    title=category.name;categoryId=category.id;
   }
   let query=supabase.from("products").select("id,name,slug,description,product_variants(id,price_paise,is_active),product_images(storage_path,alt_text,sort_order)").eq("status","active");
   if(slug!=="new-arrivals")query=query.eq("category_id",categoryId??"00000000-0000-0000-0000-000000000000");
