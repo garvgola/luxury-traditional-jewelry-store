@@ -1,20 +1,29 @@
 import Link from "next/link";
 import { SectionHeading } from "@/components/section-heading";
+import { createClient } from "@/lib/supabase/server";
 
-const categories = ["Earrings", "Necklaces", "Bangles", "Rings"];
+type ProductCardRow = {
+  id: string; name: string; slug: string; description: string | null;
+  product_variants: { id: string; price_paise: number; is_active: boolean }[];
+};
+const money=(paise:number)=>new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:0}).format(paise/100);
 
-export default function CollectionsPage() {
-  return (
-    <section className="page-section">
-      <SectionHeading eyebrow="Explore the edit" title="The collections" description="A considered starting point for discovering the NAMO NAMO world." />
-      <div className="collection-link-grid">
-        {categories.map((name) => (
-          <Link className="collection-link-card" href={`/collections/${name.toLowerCase()}`} key={name}>
-            <span>{name}</span><span aria-hidden="true">↗</span>
-          </Link>
-        ))}
-      </div>
-      <p className="simple-page-note">Product photography and verified catalogue details will be added when the product catalogue is supplied.</p>
-    </section>
-  );
+export default async function CollectionsPage() {
+  const supabase=await createClient();
+  if(!supabase) return <section className="page-section"><SectionHeading eyebrow="Explore the edit" title="The collections" description="Our catalogue is being prepared. Please return soon." /></section>;
+  const {data:products,error}=await supabase.from("products")
+    .select("id,name,slug,description,product_variants(id,price_paise,is_active)")
+    .eq("status","active").order("created_at",{ascending:false});
+  return <section className="page-section collection-page">
+    <SectionHeading eyebrow="Explore the edit" title="The collections" description="Discover pieces shaped by heritage, detail and a contemporary point of view." />
+    {error ? <p className="simple-page-note">We could not load the collection just now. Please try again later.</p> : !products?.length ? <div className="empty-state"><span className="empty-ornament">✧</span><h2>Something beautiful is taking shape</h2><p>Our first collection will appear here as soon as the verified catalogue is published.</p></div> :
+    <div className="product-grid">{(products as unknown as ProductCardRow[]).map((product)=>{
+      const variant=product.product_variants?.find((v)=>v.is_active);
+      return <Link href={`/products/${product.slug}`} className="product-card" key={product.id}>
+        <div className="product-card-art"><span>✧</span><small>NAMO NAMO JEWELS</small></div>
+        <div className="product-card-meta"><h3>{product.name}</h3>{variant&&<strong>{money(variant.price_paise)}</strong>}</div>
+        <p>{product.description || "A considered heritage-inspired design."}</p>
+      </Link>;
+    })}</div>}
+  </section>;
 }

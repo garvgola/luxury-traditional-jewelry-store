@@ -1,124 +1,74 @@
 # Project Status
 
 **Repository:** garvgola/luxury-traditional-jewelry-store  
-**Current phase:** Phase 0 — Architecture audit and project foundation  
+**Brand:** NAMO NAMO jewels  
+**Current phase:** Phase 2 — Customer experience and backend integration  
 **Last updated:** 2026-11-21
 
-## Phase 0 checklist
+## Verified repository state
 
-- [x] Confirm repository identity and retain existing repository name.
-- [x] Establish project README and baseline engineering principles.
-- [x] Create Phase 0 tracking issue.
-- [ ] Inspect existing source tree and dependency manifests.
-- [x] Draft system architecture.
-- [x] Draft conceptual database schema.
-- [x] Draft API contracts.
-- [x] Define agent responsibilities and phase dependencies.
-- [x] Draft integration guide.
-- [x] Draft security standards.
-- [ ] Owner review and approval of Phase 0 architecture.
-- [ ] Establish development branch and CI baseline after repository workflow review.
+- [x] Existing repository retained; no duplicate repository created.
+- [x] `main` retained as the stable baseline.
+- [x] `develop` used as the integration branch.
+- [x] Phase 0 architecture, API, database and security contracts were approved by the owner in the earlier project workflow.
+- [x] Phase 1 heritage-fusion design direction was approved by the owner.
+- [x] Next.js 15 / React 19 / TypeScript frontend foundation integrated into `develop`.
+- [x] Supabase/PostgreSQL foundation migration and RLS policies integrated into `develop`.
+- [x] Integration PR #8 merged into `develop`.
+- [x] GitHub Actions passed for dependency installation, TypeScript, ESLint and production build on integration PR #8.
+- [x] Corrected the enum/table name collision and shipping-prefix unnest alias in the database migration.
 
-## Current evidence and limitations
+## Customer experience workstream
 
-The repository was initially reported as empty. A README was subsequently found on `main` and updated. No application source code, package manifest, migrations, tests, or deployment configuration have yet been audited in this phase. The architecture documents are proposals, not evidence of implemented functionality.
+**Branch:** `feature/customer-experience`
 
-## Blocking owner decisions
+- [x] Supabase browser/server client helpers using cookie-based SSR.
+- [x] Session-refresh middleware for Next.js 15.
+- [x] Sign-up and sign-in interfaces.
+- [x] Email confirmation callback.
+- [x] Authenticated customer account view with profile and recent orders.
+- [x] Published catalogue query and product detail route.
+- [x] Authenticated cart API (read, add, quantity update, remove).
+- [x] Customer bag UI and quantity controls.
+- [x] Checkout readiness guard that does not pretend to process payments.
+- [ ] CI validation of this workstream.
+- [ ] Supabase development project configured and migration applied.
+- [ ] Authentication, RLS and cart flows tested against Supabase.
 
-1. Confirm the store/brand name and final visual identity.
-2. Confirm whether guest checkout is required.
-3. Confirm product variant and stock-tracking model.
-4. Confirm shipping provider and shipping rules.
-5. Confirm returns, cancellation, exchange, and refund policies.
-6. Confirm GST/tax and invoice requirements with a qualified accountant.
-7. Confirm email/SMS provider and notification scope.
-8. Confirm first-release scope for coupons, reviews, and stock alerts.
+## Current implementation limits
+
+- No Supabase project credentials are configured in this environment; real authentication and database-backed operations have not been verified.
+- The database migration has not been applied to a Supabase instance. pgTAP tests have not been executed.
+- No real catalogue records or owner-approved product photography have been supplied. Empty states and neutral placeholders are used instead of invented product listings.
+- The approved logo concept still needs production-ready vector/transparent and compact variants.
+- Checkout is intentionally guarded. Tax/GST treatment and invoice requirements need owner/accountant confirmation; Razorpay test credentials and server-side payment implementation are not yet configured.
+- Admin dashboard, product management, storage bucket policies, customer address management, email notifications, coupons, reviews and order fulfilment UI remain outstanding.
+- No end-to-end browser/accessibility/security test suite has been executed.
+- No Vercel deployment has been configured or verified.
+
+## Confirmed release-one business rules
+
+- Visitors may browse without an account; registration/sign-in is required before checkout.
+- No per-variant stock quantity tracking or automatic stock decrement in release one. Product availability is manually maintained by the owner.
+- Shipping charges are location-based and owner-configured by postal-code zone/rate.
+- Estimated delivery windows are indicative, not guaranteed, and must be persisted on orders.
+- No courier API integration, returns/refunds workflow or guest checkout in release one.
+- INR monetary values are integer paise.
 
 ## Release controls
 
 - No live Razorpay payments without explicit owner approval.
 - No production deployment without QA sign-off and explicit owner approval.
-- No real customer data or secrets in repository.
-- Do not apply database migrations to a live project until reviewed and approved.
+- No production migration or destructive data change without owner approval.
+- No real customer data or secrets in source control.
+- Do not mark features complete until code, test evidence and external configuration are verified.
 
-## Tracking
+## Next actions
 
-See [Phase 0 GitHub issue #1](https://github.com/garvgola/luxury-traditional-jewelry-store/issues/1).
-
-
-## Owner decisions captured (2026-11-21)
-
-- [x] Public browsing allowed without an account; registration/sign-in required to place an order.
-- [x] No per-variant stock tracking in release one; demand-led procurement and manual availability updates by the owner.
-- [x] Returns/refunds deferred to future scope; retain extensible order/payment records.
-- [x] Shipping managed by the owner; no shipping-provider integration in release one.
-
-## Updated first-release constraints
-
-- No guest checkout.
-- No automated stock reservation, decrement, or per-variant quantity ledger in release one. Use manually maintained availability/lead-time state and clearly communicate that fulfilment may be demand-led.
-- No returns/refunds workflow in release one.
-- No courier API integration in release one. Admin should support manual fulfilment/tracking updates if tracking details are provided by the owner.
-
-## Remaining owner decisions before checkout implementation
-
-1. How should shipping charges be calculated and displayed (fixed fee, free shipping, location-based, or confirmed manually before payment)?
-2. What exact product availability labels should customers see (e.g. available to order, made to order, temporarily unavailable)?
-3. What delivery estimate or lead-time wording should be displayed for demand-led procurement?
-
-
-## Shipping and delivery decisions recorded (2026-11-21)
-
-- [x] Shipping charge is location-based and managed through owner-configured rates/zones.
-- [x] Display an estimated delivery window; it is indicative, not guaranteed.
-- [x] Persist the applied shipping fee and estimate on the order so future configuration changes do not rewrite historical orders.
-
-## Updated checkout requirements
-
-- Checkout quote must calculate shipping from the delivery location on the server and display the complete payable total before payment.
-- Owner-managed shipping configuration is required; courier/carrier API integration is not.
-- Estimated delivery windows must be configurable and saved with the order.
-
-
-## Phase 0 approval and Phase 1 progress (2026-11-21)
-
-- [x] Owner approved the Phase 0 architecture, database schema proposal, and API design.
-- [x] Phase 1 design system specification added: `DESIGN_SYSTEM.md`.
-- [x] Page inventory and first-release user flows added: `PAGE_SPECIFICATIONS.md`.
-- [x] Shared UI component contract added: `COMPONENT_CATALOG.md`.
-- [ ] Owner confirms brand/store name, logo, and final typography preference.
-- [ ] Owner supplies product photography and verified product attribute vocabulary.
-- [ ] Owner confirms delivery regions/postal-code coverage, location-based rate rules, and estimated delivery ranges.
-- [ ] Agent 1 visual review and owner approval of Phase 1 design direction.
-
-## Phase 1 handoff
-
-The documents on `develop` define the design baseline for Agent 2 frontend implementation and Agent 6 admin UI. They are specifications, not implemented components or visual mockups. Do not begin production frontend implementation until the design direction and required owner inputs are reviewed.
-
-
-## Phase 1 brand decisions (2026-11-21)
-
-- [x] Brand name confirmed: **NAMO NAMO jewels**.
-- [x] Visual direction confirmed: **heritage fusion** (traditional Indian jewellery character with contemporary luxury design).
-- [x] Owner selected the generated cream/ivory-background logo concept as the primary brand direction.
-- [x] Earlier burgundy-background logo concept is not the primary version.
-- [ ] Prepare production-ready vector/transparent and compact logo variants from the approved concept.
-- [ ] Agent 1 incorporates the selected logo direction and prepares final visual previews for owner review.
-
-## Phase 1 next actions
-
-1. Refine the design system and page specifications for NAMO NAMO jewels.
-2. Prepare a production-ready vector/transparent master and compact logo variants from the selected cream-background concept.
-3. Produce homepage, catalogue, product detail, and mobile header visual previews using the selected brand direction.
-4. Obtain owner approval of the visual direction and key page layouts before frontend implementation.
-
-
-## Visual preview checkpoint (2026-11-21)
-
-- [x] Generated first Phase 1 visual concept board for the cream/ivory, antique-gold, burgundy heritage-fusion direction.
-- [x] Preview includes desktop homepage, collection listing, product detail, and mobile storefront concepts.
-- [ ] Owner reviews and approves the visual direction/layout before frontend implementation.
-- [ ] Replace all illustrative product names, prices, delivery windows, and photography with verified owner-provided content before production.
-- [ ] Reconcile any visual-board color/font labels against the approved design tokens in `DESIGN_SYSTEM.md`; the written design-system tokens remain the source of truth unless the owner approves changes.
-
-**Current gate:** Phase 1 visual concept prepared; owner approval pending. Frontend implementation (Phase 2) is not yet authorized by this visual checkpoint.
+1. Pass CI for `feature/customer-experience` and resolve any type/lint/build defects.
+2. Configure a disposable development Supabase project and apply the migration.
+3. Test registration, email confirmation, sign-in, customer data isolation, catalogue reads and cart CRUD.
+4. Implement checkout quote using server-calculated shipping and owner-approved tax rules.
+5. Implement Razorpay test mode, signature verification and idempotent webhook handling.
+6. Build the protected admin catalogue, availability, shipping and order-management workflows.
+7. Complete independent QA and only then prepare a production deployment review.
