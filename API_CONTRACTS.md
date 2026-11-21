@@ -87,3 +87,12 @@ Verify the signature against the raw request body and configured webhook secret 
 ## 7. Contract test requirements
 
 Every route requires schema tests, authentication/authorization tests, ownership tests, validation tests, failure-path tests, and integration tests for database/payment side effects.
+
+
+## 8. Owner decisions recorded (2026-11-21)
+
+- Public catalogue endpoints are available without authentication. Cart checkout and order creation require an authenticated customer; unauthenticated order attempts return 401 and the UI directs the visitor to register/sign in.
+- Remove guest checkout from release-one scope. A persistent guest cart is optional and should not be implemented unless separately approved.
+- Do not expose stock quantity or implement automatic inventory reservation/decrement in release one. Product/variant availability is maintained manually by the owner and may be surfaced through a simple availability/lead-time field. The server must prevent ordering items explicitly marked unavailable.
+- Returns/refunds endpoints are future scope and must not be presented as available in the first release.
+- Shipping-provider integrations are out of scope. Admin/owner workflows may record courier name, tracking reference, dispatch date, and fulfilment status manually. Final shipping charges must be shown before order placement; the pricing rule needs owner confirmation.
