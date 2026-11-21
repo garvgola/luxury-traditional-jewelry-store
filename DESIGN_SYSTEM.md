@@ -147,7 +147,7 @@ Agent 2 should translate these tokens into CSS variables/design tokens and reusa
 
 - Store/brand name: **NAMO NAMO jewels**. Preserve this exact spelling and capitalization in brand references unless the owner supplies an official lockup with a different typographic treatment.
 - Primary visual direction: **Heritage fusion** — traditional Indian jewellery cues and craftsmanship-led storytelling combined with contemporary luxury layouts and restrained interface patterns.
-- Logo: owner already has a logo. Use the supplied official asset as the source of truth; do not redraw, recreate, approximate, or alter the mark without permission. Until the asset is supplied, use a neutral text placeholder reading “NAMO NAMO jewels” in design previews only.
+- Logo: a generated cream-background logo concept has been selected by the owner as the current primary brand direction. It features an antique-gold Mughal-inspired arch/lotus emblem, ruby-red gemstone accent, and the “NAMO NAMO jewels” wordmark. Treat the cream/ivory background version as primary; the earlier burgundy-background version is not the primary logo. The generated raster artwork is a visual concept, not a production-ready vector master. Before production, prepare/verify a clean transparent or vector lockup and small-size mark without changing the approved design direction.
 
 ### Refined visual expression
 
@@ -157,9 +157,11 @@ Agent 2 should translate these tokens into CSS variables/design tokens and reusa
 - Product imagery remains the hero. Use generous whitespace, clear hierarchy, restrained ornament, and contemporary grid systems.
 - The overall impression should be rooted in Indian heritage but polished, readable, and current—not a wedding invitation or heavily ornamental template.
 
-### Logo handling and asset requirements
+### Approved logo direction and asset requirements
 
-- Request the original logo file in SVG or high-resolution transparent PNG if available.
-- Preserve aspect ratio, clear space, original colors, and minimum readable size according to the supplied artwork.
-- Create light/dark background variants only if the owner provides approved assets or explicitly authorizes adaptation.
-- Do not add effects, gradients, outlines, or recolor the logo without approval.
+- Primary lockup: cream/ivory background with antique-gold emblem and wordmark, plus the ruby-red gemstone accent.
+- The burgundy-background version is not the selected primary logo.
+- Keep the approved logo artwork intact when placing it in mockups; preserve aspect ratio and clear space.
+- The current generated artwork is a raster concept. Before production use, create or commission a clean vector master and transparent-background variant while preserving the approved visual design.
+- Create compact header/favicon variants as separate responsive brand assets; do not simply shrink the detailed lockup until it becomes illegible.
+- Do not claim that vector, transparent, or small-size variants already exist until they are actually produced and reviewed.
