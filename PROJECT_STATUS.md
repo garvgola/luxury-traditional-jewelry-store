@@ -78,3 +78,19 @@ See [Phase 0 GitHub issue #1](https://github.com/garvgola/luxury-traditional-jew
 - Checkout quote must calculate shipping from the delivery location on the server and display the complete payable total before payment.
 - Owner-managed shipping configuration is required; courier/carrier API integration is not.
 - Estimated delivery windows must be configurable and saved with the order.
+
+
+## Phase 0 approval and Phase 1 progress (2026-11-21)
+
+- [x] Owner approved the Phase 0 architecture, database schema proposal, and API design.
+- [x] Phase 1 design system specification added: `DESIGN_SYSTEM.md`.
+- [x] Page inventory and first-release user flows added: `PAGE_SPECIFICATIONS.md`.
+- [x] Shared UI component contract added: `COMPONENT_CATALOG.md`.
+- [ ] Owner confirms brand/store name, logo, and final typography preference.
+- [ ] Owner supplies product photography and verified product attribute vocabulary.
+- [ ] Owner confirms delivery regions/postal-code coverage, location-based rate rules, and estimated delivery ranges.
+- [ ] Agent 1 visual review and owner approval of Phase 1 design direction.
+
+## Phase 1 handoff
+
+The documents on `develop` define the design baseline for Agent 2 frontend implementation and Agent 6 admin UI. They are specifications, not implemented components or visual mockups. Do not begin production frontend implementation until the design direction and required owner inputs are reviewed.
