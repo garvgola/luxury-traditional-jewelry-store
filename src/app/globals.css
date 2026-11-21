@@ -221,3 +221,19 @@ button { font: inherit; }
 
 .admin-category-layout{display:grid;grid-template-columns:minmax(280px,.8fr) 1.2fr;gap:26px;align-items:start}.admin-category-row{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:16px 0;border-bottom:1px solid var(--line-200)}.admin-category-row strong,.admin-category-row small{display:block}.admin-category-row small{font-size:11px;color:var(--muted-600);margin-top:5px}.admin-category-actions{display:flex;gap:12px;margin-top:10px}.admin-category-actions button{background:none;border:0;color:var(--burgundy-800);font-size:11px;text-decoration:underline;cursor:pointer}
 @media(max-width:900px){.admin-category-layout{grid-template-columns:1fr}}
+
+.product-tax-note{margin-top:-8px;font-size:11px;color:var(--muted-600)}
+.checkout-total{font-weight:600;border-top:1px solid var(--line-200);padding-top:16px!important}
+.checkout-success{max-width:780px;margin:22px auto;padding:20px 22px;background:#edf5ed;border:1px solid #c7ddc7;color:#254c2a}
+.checkout-success p{font-size:13px;line-height:1.6;margin:7px 0}
+.customer-order-page>h1{font-family:Georgia,serif;font-weight:400;color:var(--burgundy-900);font-size:clamp(36px,5vw,54px);margin:14px 0}
+.order-status-line{color:var(--muted-600);text-transform:capitalize}
+.customer-order-layout{display:grid;grid-template-columns:1.4fr .8fr;gap:28px;margin-top:30px;align-items:start}
+.customer-order-items,.customer-order-summary{padding:25px;background:#fffdf9;border:1px solid var(--line-200)}
+.customer-order-items h2,.customer-order-summary h2{font-family:Georgia,serif;font-weight:400;color:var(--burgundy-900)}
+.customer-order-item{display:flex;justify-content:space-between;gap:20px;padding:16px 0;border-bottom:1px solid var(--line-200)}
+.customer-order-item div{display:grid;gap:6px}.customer-order-item small{font-size:11px;color:var(--muted-600)}
+.customer-order-summary>div{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line-200);font-size:13px}
+.customer-order-summary h3{font-family:Georgia,serif;font-weight:400;color:var(--burgundy-900);margin-top:25px}
+.customer-order-summary p{font-size:12px;color:var(--muted-600);line-height:1.7}
+@media(max-width:760px){.customer-order-layout{grid-template-columns:1fr}.customer-order-items,.customer-order-summary{padding:20px}}
