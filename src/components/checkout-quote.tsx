@@ -27,7 +27,7 @@ async function loadRazorpay(){
 export function CheckoutQuote(){
   const [addresses,setAddresses]=useState<Address[]>([]);const [addressId,setAddressId]=useState("");
   const [quote,setQuote]=useState<Quote|null>(null);const [busy,setBusy]=useState(false);
-  const [error,setError]=useState("");const [message,setMessage]=useState("");const [loading,setLoading]=useState(true);
+  const [error,setError]=useState("");const [message,setMessage]=useState("");const [paymentPending,setPaymentPending]=useState(false);const [loading,setLoading]=useState(true);
   const [idempotencyKey,setIdempotencyKey]=useState("");
   useEffect(()=>{
     const stored=window.sessionStorage.getItem("nnj-checkout-idempotency");
@@ -71,17 +71,18 @@ export function CheckoutQuote(){
           try{
             const verifyResponse=await fetch("/api/checkout/verify",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(response)});
             const verified=await verifyResponse.json();if(!verifyResponse.ok)throw new Error(verified.error);
+            setPaymentPending(false);
             window.sessionStorage.removeItem("nnj-checkout-idempotency");
             setMessage(`Payment confirmed. Your order number is ${verified.orderNumber}.`);
             setQuote(null);
             window.location.assign(`/account?order=${encodeURIComponent(verified.orderNumber)}`);
-          }catch(cause){setError(cause instanceof Error?cause.message:"Payment confirmation is pending. Do not pay again; check your order status.");}
+          }catch(cause){setPaymentPending(true);setQuote(null);setError(cause instanceof Error?cause.message:"Payment confirmation is pending. Do not pay again; check your order status.");}
           finally{setBusy(false);}
         },
         modal:{ondismiss:()=>{setBusy(false);setMessage("Payment window closed. Your order is not marked paid.");}},
       };
       const razorpay=new window.Razorpay!(options);
-      razorpay.on("payment.failed",response=>{setError(response.error?.description||"Payment failed. You can try again.");setBusy(false);});
+      razorpay.on("payment.failed",response=>{setPaymentPending(false);setError(response.error?.description||"Payment failed. You can try again.");setBusy(false);});
       razorpay.open();
     }catch(cause){setError(cause instanceof Error?cause.message:"Could not start secure checkout.");setBusy(false);}
   }
@@ -92,6 +93,7 @@ export function CheckoutQuote(){
     </div>
     {error&&<p className="form-error" role="alert">{error}</p>}
     {message&&<p className="form-success" role="status">{message}</p>}
+    {paymentPending&&<div className="checkout-blocked" role="status"><strong>Payment confirmation pending</strong><p>Do not attempt another payment. The payment provider is being checked and your order will update once the verified webhook is received.</p><Link href="/account" className="text-link">Check your order history</Link></div>}
     {quote&&<div className="checkout-summary"><h2>Order summary</h2>
       <div><span>Product subtotal</span><strong>{money(quote.subtotalPaise)}</strong></div>
       {quote.taxConfigured&&<div><span>GST (included/added as configured)</span><strong>{money(quote.taxPaise)}</strong></div>}
