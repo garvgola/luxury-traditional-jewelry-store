@@ -37,6 +37,7 @@ Apply all migrations to a disposable development project first:
 4. `20261121000400_product_media_storage.sql`
 5. `20261121000500_seed_store_categories.sql`
 6. `20261121000600_production_checkout_payments.sql`
+7. `20261121000700_admin_product_variants.sql`
 
 Then run `supabase test db`. The checkout/payment migration is code in the repository; it has not been applied to a live Supabase project in this work session.
 
