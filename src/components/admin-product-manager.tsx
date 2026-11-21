@@ -82,10 +82,3 @@ export function AdminProductManager({products:initial,categories}:{products:Admi
     </article>)}</div>
   </div>;
 }
-
-        })}
-      </div>
-      {product.status!=="archived"&&<button className="admin-archive" onClick={()=>void archive(product.id)}>Archive</button>}
-    </article>)}</div>
-  </div>;
-}
