@@ -152,3 +152,11 @@ For each page/module specify:
 - Shipping service regions/postal-code coverage, fee rules, and estimated delivery ranges.
 - Customer-care contact details and final policy/legal copy.
 - Whether coupon codes, product reviews, and newsletter signup belong in release one.
+
+
+## 12. Brand application update (owner-confirmed 2026-11-21)
+
+- Brand name displayed across the storefront: **NAMO NAMO jewels**.
+- Visual direction: heritage fusion—traditional Indian jewellery cues with contemporary luxury layout and usability.
+- Header, footer, favicon, account screens, transactional UI, and admin login should use the owner's existing official logo once supplied. Until then, use a text-only placeholder in non-production design work.
+- Avoid inventing a brand story, founding date, artisan lineage, origin claims, or product authenticity/certification statements. These require owner-provided facts.
