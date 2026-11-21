@@ -215,3 +215,6 @@ button { font: inherit; }
 @media(max-width:900px){.admin-shipping{grid-template-columns:1fr}}
 
 .product-visual.has-product-image{background-position:center;background-repeat:no-repeat;background-size:contain;background-color:#f4ead8}.product-card-art.has-product-image{background-position:center;background-repeat:no-repeat;background-size:cover;background-color:#f4ead8}.admin-image-upload{display:grid;gap:6px;margin-top:12px;padding:10px;background:var(--ivory-50);border:1px solid var(--line-200)}.admin-image-upload label{display:grid;gap:6px;font-size:11px;color:var(--muted-600)}.admin-image-upload input{width:100%;font-size:11px}.admin-image-upload small{font-size:11px}
+
+.catalogue-search{display:flex;gap:12px;max-width:720px;margin:0 auto 35px}.catalogue-search input{flex:1;min-width:0;padding:13px 15px;border:1px solid var(--line-200);background:#fffdf9;color:var(--ink-900)}.search-result-count{font-size:13px;color:var(--muted-600);margin-bottom:20px}
+@media(max-width:520px){.catalogue-search{flex-direction:column}.catalogue-search .button{width:100%}}
