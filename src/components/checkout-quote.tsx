@@ -75,7 +75,6 @@ export function CheckoutQuote(){
       const razorpay=new window.Razorpay!(options);
       razorpay.on("payment.failed",response=>{setError(response.error?.description||"Payment failed. You can try again.");setBusy(false);});
       razorpay.open();
-      setBusy(false);
     }catch(cause){setError(cause instanceof Error?cause.message:"Could not start secure checkout.");setBusy(false);}
   }
   return <div className="checkout-quote">
