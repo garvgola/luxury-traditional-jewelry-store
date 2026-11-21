@@ -35,6 +35,8 @@
 - [x] Customer-owned wishlist API and UI (read, save and remove) added on `feature/wishlist-addresses`.
 - [x] Customer address CRUD, protected address page and atomic default-address switching added on `feature/address-management`.
 - [x] Protected admin dashboard, order listing, product creation, availability updates and archive action added on `feature/admin-dashboard`.
+- [x] Admin category CRUD/deactivation and product category assignment added on `feature/admin-categories`.
+- [ ] Apply category seed migration to create the storefront's Earrings, Necklaces, Bangles and Rings navigation categories.
 - [ ] Apply the admin product-creation migration and grant the owner account the `admin` role in the development project.
 - [x] Private product-media bucket, admin-only uploads, and signed public reads for published products added on `feature/product-media`.
 - [ ] Apply storage migration and test upload/read permissions in development Supabase.
