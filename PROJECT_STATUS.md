@@ -111,3 +111,14 @@ The documents on `develop` define the design baseline for Agent 2 frontend imple
 2. Prepare a production-ready vector/transparent master and compact logo variants from the selected cream-background concept.
 3. Produce homepage, catalogue, product detail, and mobile header visual previews using the selected brand direction.
 4. Obtain owner approval of the visual direction and key page layouts before frontend implementation.
+
+
+## Visual preview checkpoint (2026-11-21)
+
+- [x] Generated first Phase 1 visual concept board for the cream/ivory, antique-gold, burgundy heritage-fusion direction.
+- [x] Preview includes desktop homepage, collection listing, product detail, and mobile storefront concepts.
+- [ ] Owner reviews and approves the visual direction/layout before frontend implementation.
+- [ ] Replace all illustrative product names, prices, delivery windows, and photography with verified owner-provided content before production.
+- [ ] Reconcile any visual-board color/font labels against the approved design tokens in `DESIGN_SYSTEM.md`; the written design-system tokens remain the source of truth unless the owner approves changes.
+
+**Current gate:** Phase 1 visual concept prepared; owner approval pending. Frontend implementation (Phase 2) is not yet authorized by this visual checkpoint.
