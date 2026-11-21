@@ -51,7 +51,7 @@ export async function POST(request:Request){
       method:"POST",headers:{Authorization:`Basic ${authorization}`,"Content-Type":"application/json"},
       body:JSON.stringify({amount:order.total_paise,currency:"INR",receipt:order.order_number,
         notes:{store_order_id:order.order_id,order_number:order.order_number}}),
-      cache:"no-store",
+      cache:"no-store",signal:AbortSignal.timeout(12000),
     });
     const providerOrder=await providerResponse.json().catch(()=>null) as {id?:string;amount?:number;currency?:string;error?:{description?:string}}|null;
     if(!providerResponse.ok||!providerOrder?.id||providerOrder.amount!==order.total_paise||providerOrder.currency!=="INR"){
