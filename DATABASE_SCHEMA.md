@@ -124,3 +124,11 @@ Before implementation, convert this proposal into versioned SQL migrations; defi
 - Keep inventory quantities and reservation/movement ledgers as future-scope schema options, not current implementation requirements.
 - Returns/refunds are future scope. Preserve order and payment records so a future returns/refunds module can be added without redesigning core order identity; do not implement return-request tables or workflows in release one.
 - Shipping is owner-managed. No shipping-provider integration is required for release one. Persist the customer's delivery address snapshot and allow the owner to record shipping/tracking details and update fulfilment status manually. Shipping charge rules remain an owner decision before checkout is implemented.
+
+
+## 10. Shipping and delivery decisions recorded (2026-11-21)
+
+- Shipping price is location-based and owner-managed. A simple configurable shipping-zone/rate model may be used (for example, postal-code ranges or service regions mapped to a fee); the exact rule format and rate table will be finalized during admin UX/backend design. The server must calculate the fee and include it in the checkout quote before payment.
+- Persist the delivery address snapshot on the order. Persist the applied shipping charge in integer paise and, where useful, the shipping rule/zone identifier or a pricing snapshot so historical orders remain explainable if rates change.
+- Store an estimated delivery window or estimated dispatch/delivery dates on the order as appropriate. Estimates must be treated as estimates, not guaranteed service-level commitments.
+- Owner will manage carrier selection and shipment handling manually; no carrier integration is in first-release scope.
