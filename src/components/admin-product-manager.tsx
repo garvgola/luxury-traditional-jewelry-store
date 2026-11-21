@@ -4,6 +4,7 @@ import { FormEvent,useState } from "react";
 import { AdminProductImageUpload } from "@/components/admin-product-image-upload";
 
 type Availability="available_to_order"|"made_to_order"|"temporarily_unavailable";
+type AdminCategory={id:string;name:string;is_active:boolean};
 type AdminProduct={
   id:string;name:string;slug:string;description:string|null;status:string;
   product_images:{id:string;storage_path:string;alt_text:string;sort_order:number}[];
@@ -17,10 +18,10 @@ const availabilityLabel:Record<Availability,string>={
   available_to_order:"Available to order",made_to_order:"Made to order",temporarily_unavailable:"Temporarily unavailable",
 };
 
-export function AdminProductManager({products:initial}:{products:AdminProduct[]}){
+export function AdminProductManager({products:initial,categories}:{products:AdminProduct[];categories:AdminCategory[]}){
   const [products,setProducts]=useState(initial);
   const [name,setName]=useState("");const [slug,setSlug]=useState("");const [description,setDescription]=useState("");
-  const [price,setPrice]=useState("");const [sku,setSku]=useState("");const [availability,setAvailability]=useState<Availability>("available_to_order");
+  const [price,setPrice]=useState("");const [sku,setSku]=useState("");const [categoryId,setCategoryId]=useState("");const [availability,setAvailability]=useState<Availability>("available_to_order");
   const [busy,setBusy]=useState(false);const [error,setError]=useState("");const [message,setMessage]=useState("");
 
   function changeName(value:string){setName(value);setSlug(value.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""));}
@@ -30,7 +31,7 @@ export function AdminProductManager({products:initial}:{products:AdminProduct[]}
     if(!Number.isFinite(priceNumber)||priceNumber<=0){setError("Enter a valid price in rupees.");setBusy(false);return;}
     try{
       const response=await fetch("/api/admin/products",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
-        name,slug,description,pricePaise:Math.round(priceNumber*100),sku,variantLabel:"Default",availability,
+        name,slug,description,categoryId:categoryId||null,pricePaise:Math.round(priceNumber*100),sku,variantLabel:"Default",availability,
       })});
       const result=await response.json();if(!response.ok)throw new Error(result.error);
       setMessage("Product created. Refreshing catalogue…");window.location.reload();
@@ -56,6 +57,7 @@ export function AdminProductManager({products:initial}:{products:AdminProduct[]}
       <label>Product name<input required value={name} onChange={event=>changeName(event.target.value)}/></label>
       <label>URL slug<input required value={slug} onChange={event=>setSlug(event.target.value)}/></label>
       <label>Description<textarea value={description} onChange={event=>setDescription(event.target.value)} rows={3}/></label>
+      <label>Category<select value={categoryId} onChange={event=>setCategoryId(event.target.value)}><option value="">Uncategorized</option>{categories.filter(category=>category.is_active).map(category=><option key={category.id} value={category.id}>{category.name}</option>)}</select></label>
       <div className="admin-form-row"><label>Price (₹)<input required type="number" min="0.01" step="0.01" value={price} onChange={event=>setPrice(event.target.value)}/></label><label>SKU (optional)<input value={sku} onChange={event=>setSku(event.target.value)}/></label></div>
       <label>Availability<select value={availability} onChange={event=>setAvailability(event.target.value as Availability)}><option value="available_to_order">Available to order</option><option value="made_to_order">Made to order</option><option value="temporarily_unavailable">Temporarily unavailable</option></select></label>
       {error&&<p className="form-error" role="alert">{error}</p>}{message&&<p className="form-success" role="status">{message}</p>}
