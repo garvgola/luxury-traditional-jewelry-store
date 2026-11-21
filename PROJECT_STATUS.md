@@ -34,6 +34,8 @@
 - [ ] CI validation of this workstream.
 - [x] Customer-owned wishlist API and UI (read, save and remove) added on `feature/wishlist-addresses`.
 - [x] Customer address CRUD, protected address page and atomic default-address switching added on `feature/address-management`.
+- [x] Protected admin dashboard, order listing, product creation, availability updates and archive action added on `feature/admin-dashboard`.
+- [ ] Apply the admin product-creation migration and grant the owner account the `admin` role in the development project.
 - [ ] Apply and test the default-address migration against the development Supabase project.
 - [ ] Supabase development project configured and migration applied.
 - [ ] Authentication, RLS and cart flows tested against Supabase.
