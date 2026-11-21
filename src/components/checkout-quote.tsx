@@ -38,7 +38,15 @@ export function CheckoutQuote(){
       try{
         const response=await fetch("/api/addresses");const result=await response.json();
         if(!response.ok)throw new Error(result.error);const rows:Address[]=result.addresses||[];
-        setAddresses(rows);setAddressId(rows.find(item=>item.is_default)?.id||rows[0]?.id||"");
+        setAddresses(rows);
+        const storedAddress=window.sessionStorage.getItem("nnj-checkout-address");
+        const preferred=rows.find(item=>item.id===storedAddress)||rows.find(item=>item.is_default)||rows[0];
+        const selected=preferred?.id||"";
+        setAddressId(selected);
+        if(storedAddress&&storedAddress!==selected){
+          const nextKey=window.crypto.randomUUID();window.sessionStorage.setItem("nnj-checkout-idempotency",nextKey);setIdempotencyKey(nextKey);
+        }
+        if(selected)window.sessionStorage.setItem("nnj-checkout-address",selected);
       }catch(cause){setError(cause instanceof Error?cause.message:"Could not load delivery addresses.");}
       finally{setLoading(false);}
     }
@@ -73,6 +81,7 @@ export function CheckoutQuote(){
             const verified=await verifyResponse.json();if(!verifyResponse.ok)throw new Error(verified.error);
             setPaymentPending(false);
             window.sessionStorage.removeItem("nnj-checkout-idempotency");
+            window.sessionStorage.removeItem("nnj-checkout-address");
             setMessage(`Payment confirmed. Your order number is ${verified.orderNumber}.`);
             setQuote(null);
             window.location.assign(`/account?order=${encodeURIComponent(verified.orderNumber)}`);
@@ -89,7 +98,7 @@ export function CheckoutQuote(){
   return <div className="checkout-quote">
     <div className="checkout-address"><h2>Delivery address</h2>
       {loading?<p>Loading saved addresses…</p>:!addresses.length?<div><p>You need to save a delivery address before checkout.</p><Link href="/account/addresses" className="text-link">Add an address</Link></div>:
-      <><select value={addressId} onChange={event=>{setAddressId(event.target.value);setQuote(null);const nextKey=window.crypto.randomUUID();window.sessionStorage.setItem("nnj-checkout-idempotency",nextKey);setIdempotencyKey(nextKey);}}>{addresses.map(address=><option value={address.id} key={address.id}>{address.recipient_name} — {address.address_line_1}, {address.city} {address.postal_code}</option>)}</select><Link href="/account/addresses" className="text-link">Manage addresses</Link><button className="button button-primary" disabled={busy||!addressId} onClick={()=>void calculate()}>{busy?"Please wait…":"Calculate order total"}</button></>}
+      <><select value={addressId} onChange={event=>{setAddressId(event.target.value);setQuote(null);window.sessionStorage.setItem("nnj-checkout-address",event.target.value);const nextKey=window.crypto.randomUUID();window.sessionStorage.setItem("nnj-checkout-idempotency",nextKey);setIdempotencyKey(nextKey);}}>{addresses.map(address=><option value={address.id} key={address.id}>{address.recipient_name} — {address.address_line_1}, {address.city} {address.postal_code}</option>)}</select><Link href="/account/addresses" className="text-link">Manage addresses</Link><button className="button button-primary" disabled={busy||!addressId} onClick={()=>void calculate()}>{busy?"Please wait…":"Calculate order total"}</button></>}
     </div>
     {error&&<p className="form-error" role="alert">{error}</p>}
     {message&&<p className="form-success" role="status">{message}</p>}
