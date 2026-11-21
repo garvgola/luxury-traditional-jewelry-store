@@ -94,3 +94,19 @@ See [Phase 0 GitHub issue #1](https://github.com/garvgola/luxury-traditional-jew
 ## Phase 1 handoff
 
 The documents on `develop` define the design baseline for Agent 2 frontend implementation and Agent 6 admin UI. They are specifications, not implemented components or visual mockups. Do not begin production frontend implementation until the design direction and required owner inputs are reviewed.
+
+
+## Phase 1 brand decisions (2026-11-21)
+
+- [x] Brand name confirmed: **NAMO NAMO jewels**.
+- [x] Visual direction confirmed: **heritage fusion** (traditional Indian jewellery character with contemporary luxury design).
+- [x] Owner confirms an existing logo is available.
+- [ ] Owner supplies the official logo asset (prefer SVG or high-resolution transparent PNG) and any usage rules.
+- [ ] Agent 1 incorporates the supplied logo and prepares final visual previews for owner review.
+
+## Phase 1 next actions
+
+1. Refine the design system and page specifications for NAMO NAMO jewels.
+2. Obtain and inspect the actual logo asset before integrating it.
+3. Produce homepage, catalogue, product detail, and mobile header visual previews.
+4. Obtain owner approval of the visual direction and key page layouts before frontend implementation.
