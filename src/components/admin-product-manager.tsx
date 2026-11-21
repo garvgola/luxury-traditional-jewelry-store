@@ -5,6 +5,7 @@ import { AdminProductImageUpload } from "@/components/admin-product-image-upload
 import { AdminVariantTaxEditor } from "@/components/admin-variant-tax-editor";
 import { AdminVariantPriceEditor } from "@/components/admin-variant-price-editor";
 import { AdminProductImageManager } from "@/components/admin-product-image-manager";
+import { AdminAddVariant } from "@/components/admin-add-variant";
 
 type Availability="available_to_order"|"made_to_order"|"temporarily_unavailable";
 type AdminCategory={id:string;name:string;is_active:boolean};
@@ -73,7 +74,7 @@ export function AdminProductManager({products:initial,categories}:{products:Admi
       <button className="button button-primary" disabled={busy}>{busy?"Saving…":"Create product"}</button>
     </form>
     <div className="admin-product-list"><h2>Catalogue</h2>{products.length===0?<p>No products have been added yet.</p>:products.map(product=><article className="admin-product-row" key={product.id}>
-      <div><strong>{product.name}</strong><small>/{product.slug} · {product.status}</small><AdminProductImageUpload productId={product.id}/><AdminProductImageManager images={product.product_images}/>
+      <div><strong>{product.name}</strong><small>/{product.slug} · {product.status}</small><AdminProductImageUpload productId={product.id}/><AdminProductImageManager images={product.product_images}/><AdminAddVariant productId={product.id} onCreated={()=>window.location.reload()}/>
         {product.product_variants.map(variant=>{
           const availabilityRow=variant.product_availability;
           const current=Array.isArray(availabilityRow)?availabilityRow[0]?.availability:availabilityRow?.availability;
