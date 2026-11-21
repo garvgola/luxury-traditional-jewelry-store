@@ -1,15 +1,24 @@
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Sparkles } from "lucide-react";
 import { SectionHeading } from "@/components/section-heading";
+import { createClient } from "@/lib/supabase/server";
 
-const categories = [
+const fallbackCategories = [
   { name: "Earrings", note: "Details that frame every moment", tone: "category-rose", href: "/collections/earrings" },
   { name: "Necklaces", note: "The art of a graceful statement", tone: "category-sand", href: "/collections/necklaces" },
   { name: "Bangles", note: "A little rhythm in every gesture", tone: "category-olive", href: "/collections/bangles" },
   { name: "Rings", note: "Small pieces, personal meaning", tone: "category-plum", href: "/collections/rings" },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const supabase = await createClient();
+  const { data: liveCategories } = supabase
+    ? await supabase.from("categories").select("name,slug,description,sort_order").eq("is_active",true).order("sort_order").order("name")
+    : { data: null };
+  const tones = ["category-rose","category-sand","category-olive","category-plum"];
+  const categories = liveCategories?.length
+    ? liveCategories.map((category,index)=>({name:category.name,note:category.description || "Explore the NAMO NAMO collection",tone:tones[index % tones.length],href:`/collections/${category.slug}`}))
+    : fallbackCategories;
   return (
     <>
       <section className="hero">
