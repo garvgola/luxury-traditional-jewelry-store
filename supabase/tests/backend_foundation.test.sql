@@ -1,7 +1,7 @@
 -- Run with: supabase test db
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(30);
+select plan(35);
 
 select has_table('public', 'profiles', 'profiles table exists');
 select has_table('public', 'customer_addresses', 'customer addresses table exists');
@@ -47,5 +47,7 @@ select has_column('public','product_variants','price_includes_tax','product vari
 select has_column('public','orders','checkout_idempotency_key','orders store checkout idempotency key');
 select has_column('public','orders','tax_breakdown','orders store tax calculation snapshot');
 select has_column('public','order_items','hsn_code_snapshot','order items snapshot HSN classification');
+select ok(to_regprocedure('public.mark_razorpay_payment_failed(text,text,bigint,text,text)') is not null,'failed payment reconciliation function exists');
+select ok(not has_function_privilege('authenticated','public.mark_razorpay_payment_failed(text,text,bigint,text,text)','execute'),'customers cannot alter payment failure state');
 select * from finish();
 rollback;
