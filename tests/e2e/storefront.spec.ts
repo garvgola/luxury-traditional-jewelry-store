@@ -13,6 +13,11 @@ test("collection page shows an honest empty catalogue state without Supabase con
   await expect(page.getByText("Our catalogue is being prepared. Please return soon.")).toBeVisible();
 });
 
+test("checkout explains setup is required when Supabase is not configured",async({page})=>{
+  await page.goto("/checkout");
+  await expect(page.getByText("Checkout services are being configured.")).toBeVisible();
+});
+
 test("customer can open the sign-in screen",async({page})=>{
   await page.goto("/auth/login");
   await expect(page.getByRole("heading",{name:"Sign in to your account"})).toBeVisible();
