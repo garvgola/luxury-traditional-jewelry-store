@@ -72,3 +72,11 @@ Security, accessibility, mobile responsiveness, SEO, observability, predictable 
 ## 9. Architecture gate
 
 No feature implementation or production activation should proceed until the owner reviews this document and the linked database, API, integration, and security contracts.
+
+
+## 10. Owner decisions recorded (2026-11-21)
+
+- Guest visitors may browse all public storefront content. Registration/sign-in is required before placing an order or initiating checkout.
+- Do not implement per-variant stock tracking in the first release. The business will procure stock based on demand and manage availability manually. The storefront should support an owner-managed product availability/lead-time status so customers are not promised immediately available stock without confirmation. A fuller inventory-management module may be added later.
+- Returns, exchanges, and refunds are not part of the first-release operational workflow. Keep order/payment design extensible so these can be added in a later phase.
+- Shipping will be managed by the owner. Do not integrate a shipping aggregator/provider in the first release. Allow the owner to manage shipping details/status manually and define how shipping charges are communicated before checkout implementation.
