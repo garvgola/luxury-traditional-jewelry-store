@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AddToCartButton } from "@/components/add-to-cart-button";
+import { AddToWishlistButton } from "@/components/add-to-wishlist-button";
 import { createClient } from "@/lib/supabase/server";
 
 type ProductPageProps = { params: Promise<{ slug: string }> };
@@ -30,6 +31,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       {availability?.customer_note && <p>{availability.customer_note}</p>}
       {availability?.estimated_lead_days_min != null && <p className="delivery-note">Estimated preparation: {availability.estimated_lead_days_min}{availability.estimated_lead_days_max ? `–${availability.estimated_lead_days_max}` : ""} days. Delivery estimates are indicative.</p>}
       {variant ? <AddToCartButton variantId={variant.id} disabled={availability?.availability === "temporarily_unavailable"} /> : <p className="simple-page-note">This piece is not available to order at the moment.</p>}
+      <AddToWishlistButton productId={product.id} />
     </div>
   </section>;
 }
