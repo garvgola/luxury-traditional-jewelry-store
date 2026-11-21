@@ -18,7 +18,7 @@ export async function POST(request:Request){
   const parsed=schema.safeParse(await request.json().catch(()=>null));
   if(!parsed.success)return NextResponse.json({error:"Payment verification details are invalid."},{status:400,headers:noStore});
   const secret=process.env.RAZORPAY_KEY_SECRET;
-  if(!secret)return NextResponse.json({error:"Payment verification is not configured."},{status:503,headers:noStore});
+  if(!secret||!process.env.RAZORPAY_KEY_ID)return NextResponse.json({error:"Payment verification is not configured."},{status:503,headers:noStore});
 
   const {razorpay_order_id:providerOrderId,razorpay_payment_id:providerPaymentId,razorpay_signature:signature}=parsed.data;
   const expected=createHmac("sha256",secret).update(`${providerOrderId}|${providerPaymentId}`).digest("hex");
