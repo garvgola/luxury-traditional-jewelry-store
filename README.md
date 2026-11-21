@@ -24,10 +24,10 @@ A heritage-fusion Indian jewellery e-commerce storefront built with Next.js, Typ
 - No Supabase project has been configured in this development environment; migrations have not been applied to a live database.
 - Authentication, RLS, storage policies, cart, wishlist, address and shipping operations have not been runtime-tested against a Supabase instance.
 - No owner catalogue records or approved jewellery photography have been supplied. The site uses honest empty states and neutral placeholders until real products are entered.
-- Checkout now includes server-side order creation, Razorpay order creation, signature verification and signed webhook reconciliation. It remains inactive until credentials, migrations, tax setup and runtime verification are completed.
+- Checkout now includes atomic server-side order creation, Razorpay order creation, HMAC/API verification, signed webhook reconciliation and admin order fulfilment transitions. It remains inactive until credentials, migrations, tax setup and runtime verification are completed.
 - GST/tax and invoice treatment need owner/accountant confirmation before calculating a final payable amount.
 - Razorpay order creation, signature verification, webhook processing, refunds and customer notifications are not yet implemented.
-- Admin order fulfilment updates, product variant editing, image ordering/alt-text editing and complete sales reporting remain outstanding.
+- Product variant price editing, image ordering/alt-text editing, refunds/cancellations, notifications, GST invoice engine and complete sales reporting remain outstanding.
 - Full end-to-end checkout, security, accessibility and performance testing remains outstanding.
 - No Vercel deployment or production URL has been verified.
 
