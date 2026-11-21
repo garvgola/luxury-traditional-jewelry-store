@@ -34,6 +34,17 @@ Feature pull requests #8–#17 passed their required CI checks before merge. The
 
 These routes have not been exercised against Supabase or Razorpay test credentials. The pgTAP suite includes new permission/schema assertions, but has not been executed against a Supabase project.
 
+## Added checkout/payment and fulfilment code (not runtime-verified)
+
+- Product HSN/GST configuration, tax-inclusive/exclusive calculation and checkout blocking for incomplete tax metadata.
+- Atomic order creation, address/product/tax/shipping snapshots and idempotency.
+- Razorpay order creation, payment HMAC verification and provider API confirmation.
+- Signed webhook reconciliation for captured/failed events and duplicate event IDs.
+- Admin fulfilment status transitions and shipment tracking.
+- Customer order detail and shipment tracking view.
+
+These flows have not been exercised against Supabase or Razorpay test credentials. Migration 006 and pgTAP must be run in development before any payment testing.
+
 ## Not yet tested
 
 - Supabase migrations and pgTAP.
