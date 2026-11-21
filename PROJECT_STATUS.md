@@ -14,7 +14,8 @@
 - [x] Phase 1 heritage-fusion design direction approved by the owner.
 - [x] PRs #8–#17 merged into `develop`.
 - [x] Integration CI has passed on the feature PRs: install, TypeScript, ESLint, production build and Playwright smoke tests.
-- [x] No unmerged pull requests remain at the last repository check.
+- [x] Feature PRs #8–#17 merged into `develop`.
+- [ ] Documentation reconciliation PR #18 is open for review.
 
 ## Implemented in `develop`
 
