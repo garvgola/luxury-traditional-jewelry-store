@@ -40,19 +40,6 @@ export async function PATCH(request:Request){
   if(error)return NextResponse.json({error:"Could not update product image."},{status:500});
   return NextResponse.json({success:true});
 }
-export async function PATCH(request:Request){
-  const {supabase,authorized}=await admin();
-  if(!supabase)return NextResponse.json({error:"Store services are not configured."},{status:503});
-  if(!authorized)return NextResponse.json({error:"Administrator access required."},{status:403});
-  const parsed=z.object({imageId:z.string().uuid(),altText:z.string().trim().max(250).optional(),sortOrder:z.number().int().min(0).max(10000).optional()}).refine(value=>value.altText!==undefined||value.sortOrder!==undefined).safeParse(await request.json().catch(()=>null));
-  if(!parsed.success)return NextResponse.json({error:"Invalid image update."},{status:400});
-  const {imageId,altText,sortOrder}=parsed.data;
-  const update={alt_text:altText,sort_order:sortOrder};
-  const clean=Object.fromEntries(Object.entries(update).filter(([,value])=>value!==undefined));
-  const {error}=await supabase.from("product_images").update(clean).eq("id",imageId);
-  if(error)return NextResponse.json({error:"Could not update product image."},{status:500});
-  return NextResponse.json({success:true});
-}
 export async function DELETE(request:Request){
   const {supabase,authorized}=await admin();
   if(!supabase)return NextResponse.json({error:"Store services are not configured."},{status:503});
