@@ -1,6 +1,6 @@
 # NAMO NAMO jewels
 
-A heritage-fusion Indian jewellery e-commerce storefront built with Next.js, TypeScript, Tailwind CSS, Supabase/PostgreSQL and Supabase Storage. Razorpay integration is planned but is not enabled.
+A heritage-fusion Indian jewellery e-commerce storefront built with Next.js, TypeScript, Tailwind CSS, Supabase/PostgreSQL, Supabase Storage and Razorpay checkout code. Payments are not enabled until external validation is complete.
 
 ## Current delivery status
 
@@ -13,10 +13,16 @@ A heritage-fusion Indian jewellery e-commerce storefront built with Next.js, Typ
 - Responsive heritage-fusion storefront shell and approved design direction.
 - Supabase browser/server clients, session refresh, sign-up, sign-in, email confirmation and sign-out.
 - Customer account, saved wishlist, persistent cart and delivery-address CRUD.
-- Database-backed product catalogue, product detail, category pages and product search.
-- Admin role gate, dashboard metrics, product creation, availability management, product archive and category management.
+- Database-backed product catalogue, product detail, category pages, product search and selectable product variants.
+- Product galleries with signed private images, image ordering, alt-text management and admin uploads.
+- Admin product metadata, price/SKU, tax classification and variant management.
+- Admin role gate, dashboard metrics, product/category/variant management, availability management and product archive.
+- Admin order fulfilment transitions and shipment tracking.
 - Admin-managed shipping zones/rates and server-side shipping estimates.
-- Private product-media bucket design, admin-only uploads and signed image URLs for published products.
+- Private product-media bucket, admin-only uploads and signed image URLs for published products.
+- Razorpay order creation, HMAC/API payment verification, signed captured/failed webhooks and idempotent order finalization.
+- Customer order confirmation/details and admin fulfilment tracking.
+- Security response headers and baseline CSP.
 - GitHub Actions CI: dependency install, TypeScript, ESLint, production build and Playwright browser smoke tests.
 
 ## Not yet production-ready
@@ -26,8 +32,9 @@ A heritage-fusion Indian jewellery e-commerce storefront built with Next.js, Typ
 - No owner catalogue records or approved jewellery photography have been supplied. The site uses honest empty states and neutral placeholders until real products are entered.
 - Checkout now includes atomic server-side order creation, Razorpay order creation, HMAC/API verification, signed webhook reconciliation and admin order fulfilment transitions. It remains inactive until credentials, migrations, tax setup and runtime verification are completed.
 - GST/tax and invoice treatment need owner/accountant confirmation before calculating a final payable amount.
-- Razorpay order creation, signature verification, webhook processing, refunds and customer notifications are not yet implemented.
-- Product variant price editing, image ordering/alt-text editing, refunds/cancellations, notifications, GST invoice engine and complete sales reporting remain outstanding.
+- Razorpay integration code is not runtime-tested against merchant credentials or a configured webhook.
+- Refunds, partial refunds, cancellations after payment, disputes and transactional email notifications are not implemented.
+- GST split/invoice engine, shipping tax treatment, refunds/cancellations, transactional notifications and complete sales reporting remain outstanding.
 - Full end-to-end checkout, security, accessibility and performance testing remains outstanding.
 - No Vercel deployment or production URL has been verified.
 
@@ -66,7 +73,8 @@ Apply migrations in this order to a disposable **development** Supabase project:
 Then:
 - Run the pgTAP tests in `supabase/tests`.
 - Create the owner account and grant the admin role using `docs/backend/ADMIN_BOOTSTRAP.md`.
-- Configure `SUPABASE_SERVICE_ROLE_KEY` server-side only for shipping quote execution.
+- Configure `SUPABASE_SERVICE_ROLE_KEY` server-side only for trusted shipping, checkout and payment RPCs.
+- Configure Razorpay test keys and webhook secret server-side using `docs/backend/PRODUCTION_CHECKOUT.md`.
 - Configure owner-managed shipping zones/rates in `/admin/shipping`.
 - Upload owner-approved product images in `/admin/products`.
 
@@ -77,7 +85,7 @@ Never commit `.env.local`, service-role keys, Razorpay secrets or customer data.
 - Public browsing is allowed; sign-in is required before checkout.
 - Product availability is manually managed; there is no quantity inventory or automatic stock decrement.
 - Shipping is configured by postal-code zone and subtotal threshold; delivery windows are indicative.
-- No courier API, guest checkout, returns/refunds workflow or automatic fulfilment in release one.
+- No courier API, guest checkout, returns/refunds or dispute workflow in release one; admin fulfilment status is manually managed.
 - INR monetary values are integer paise.
 - Prices, tax, shipping, orders and payment state must be calculated/verified server-side.
 - Live Razorpay payments and production deployment require explicit owner approval.
@@ -101,3 +109,8 @@ Never commit `.env.local`, service-role keys, Razorpay secrets or customer data.
 - `SECURITY_STANDARDS.md`
 - `docs/backend/ADMIN_BOOTSTRAP.md`
 - `docs/backend/PRODUCT_MEDIA.md`
+- `docs/backend/PRODUCTION_CHECKOUT.md`
+- `DEPLOYMENT_PLAN.md`
+- `SECURITY_AUDIT.md`
+- `TEST_REPORT.md`
+- `ISSUE_REGISTER.md`
