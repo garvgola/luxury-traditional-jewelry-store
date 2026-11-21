@@ -36,6 +36,8 @@
 - [x] Customer address CRUD, protected address page and atomic default-address switching added on `feature/address-management`.
 - [x] Protected admin dashboard, order listing, product creation, availability updates and archive action added on `feature/admin-dashboard`.
 - [ ] Apply the admin product-creation migration and grant the owner account the `admin` role in the development project.
+- [x] Admin-managed shipping zones/rates and authenticated server-side shipping quote flow added on `feature/shipping-checkout`.
+- [ ] Configure development Supabase service-role key and owner-managed postal-code zones/rates; run quote tests.
 - [ ] Apply and test the default-address migration against the development Supabase project.
 - [ ] Supabase development project configured and migration applied.
 - [ ] Authentication, RLS and cart flows tested against Supabase.

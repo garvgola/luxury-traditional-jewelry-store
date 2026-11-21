@@ -220,7 +220,7 @@ as $$
     and r.min_order_subtotal_paise <= p_subtotal_paise
   order by
     (select coalesce(max(length(prefix)), 0)
-     from unnest(z.postal_code_prefixes) prefix
+     from unnest(z.postal_code_prefixes) as prefixes(prefix)
      where p_postal_code like prefix || '%') desc,
     r.min_order_subtotal_paise desc
   limit 1;
