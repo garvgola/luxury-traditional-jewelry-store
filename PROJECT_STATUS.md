@@ -44,3 +44,24 @@ The repository was initially reported as empty. A README was subsequently found 
 ## Tracking
 
 See [Phase 0 GitHub issue #1](https://github.com/garvgola/luxury-traditional-jewelry-store/issues/1).
+
+
+## Owner decisions captured (2026-11-21)
+
+- [x] Public browsing allowed without an account; registration/sign-in required to place an order.
+- [x] No per-variant stock tracking in release one; demand-led procurement and manual availability updates by the owner.
+- [x] Returns/refunds deferred to future scope; retain extensible order/payment records.
+- [x] Shipping managed by the owner; no shipping-provider integration in release one.
+
+## Updated first-release constraints
+
+- No guest checkout.
+- No automated stock reservation, decrement, or per-variant quantity ledger in release one. Use manually maintained availability/lead-time state and clearly communicate that fulfilment may be demand-led.
+- No returns/refunds workflow in release one.
+- No courier API integration in release one. Admin should support manual fulfilment/tracking updates if tracking details are provided by the owner.
+
+## Remaining owner decisions before checkout implementation
+
+1. How should shipping charges be calculated and displayed (fixed fee, free shipping, location-based, or confirmed manually before payment)?
+2. What exact product availability labels should customers see (e.g. available to order, made to order, temporarily unavailable)?
+3. What delivery estimate or lead-time wording should be displayed for demand-led procurement?
