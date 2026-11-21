@@ -9,6 +9,27 @@ async function getCustomerCart(supabase: NonNullable<Awaited<ReturnType<typeof c
   return supabase.from("carts").upsert({ user_id: userId }, { onConflict: "user_id" }).select("id").single();
 }
 
+type CartRow = {
+  id: string;
+  quantity: number;
+  product_variants: {
+    id: string;
+    variant_label: string;
+    price_paise: number;
+    products: { name: string; slug: string; status: string } | { name: string; slug: string; status: string }[];
+  } | {
+    id: string;
+    variant_label: string;
+    price_paise: number;
+    products: { name: string; slug: string; status: string } | { name: string; slug: string; status: string }[];
+  }[];
+};
+
+type CartResponseItem = {
+  id: string; quantity: number; variantId: string; variantLabel: string;
+  pricePaise: number; name: string; slug: string;
+};
+
 export async function GET() {
   const supabase = await createClient();
   if (!supabase) return NextResponse.json({ error: "Store services are not configured yet." }, { status: 503 });
@@ -20,12 +41,19 @@ export async function GET() {
     .select("id,quantity,product_variants!inner(id,variant_label,price_paise,products!inner(name,slug,status))")
     .eq("cart_id", cart.id);
   if (error) return NextResponse.json({ error: "Your bag could not be loaded." }, { status: 500 });
-  const items = (data ?? []).map((item: any) => ({
-    id: item.id, quantity: item.quantity, variantId: item.product_variants.id,
-    variantLabel: item.product_variants.variant_label, pricePaise: item.product_variants.price_paise,
-    name: item.product_variants.products.name, slug: item.product_variants.products.slug,
-  }));
-  return NextResponse.json({ items, totalPaise: items.reduce((sum: number, item: any) => sum + item.pricePaise * item.quantity, 0) });
+  const rows = (data ?? []) as unknown as CartRow[];
+  const items = rows.flatMap((item): CartResponseItem[] => {
+    const variant = Array.isArray(item.product_variants) ? item.product_variants[0] : item.product_variants;
+    if (!variant) return [];
+    const product = Array.isArray(variant.products) ? variant.products[0] : variant.products;
+    if (!product) return [];
+    return [{
+      id: item.id, quantity: item.quantity, variantId: variant.id,
+      variantLabel: variant.variant_label, pricePaise: variant.price_paise,
+      name: product.name, slug: product.slug,
+    }];
+  });
+  return NextResponse.json({ items, totalPaise: items.reduce((sum, item) => sum + item.pricePaise * item.quantity, 0) });
 }
 
 export async function POST(request: Request) {
