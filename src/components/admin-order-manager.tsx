@@ -18,7 +18,7 @@ function FulfilmentCard({order}:{order:Order}){
     finally{setBusy(false);}
   }
   return <article className="admin-order-card">
-    <div className="admin-order-top"><div><strong>{order.order_number}</strong><small>{order.customer_name} · {new Date(order.created_at).toLocaleDateString("en-IN")}</small></div><div><strong>{money(order.total_paise)}</strong><span className="admin-status">{status.replaceAll("_"," ")}</span></div></div>
+    <div className="admin-order-top"><div><strong>{order.order_number}</strong><small>{order.customer_name} · {new Intl.DateTimeFormat("en-IN",{timeZone:"Asia/Kolkata",day:"2-digit",month:"short",year:"numeric"}).format(new Date(order.created_at))}</small></div><div><strong>{money(order.total_paise)}</strong><span className="admin-status">{status.replaceAll("_"," ")}</span></div></div>
     {order.shipping_carrier&&<p className="admin-order-tracking">{order.shipping_carrier} · {order.tracking_number}</p>}
     {next&&<div className="admin-order-actions">
       {next==="shipped"&&<div className="admin-shipment-fields"><label>Shipping carrier<input value={carrier} onChange={event=>setCarrier(event.target.value)} placeholder="Courier partner"/></label><label>Tracking number<input value={tracking} onChange={event=>setTracking(event.target.value)} placeholder="AWB / tracking ID"/></label></div>}
