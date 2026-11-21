@@ -20,6 +20,7 @@ const availabilitySchema=z.object({
   availability:z.enum(["available_to_order","made_to_order","temporarily_unavailable"]),
 });
 const archiveSchema=z.object({productId:z.string().uuid()});
+const taxSchema=z.object({variantId:z.string().uuid(),hsnCode:z.string().trim().regex(/^[0-9]{4,8}$/),gstRateBps:z.number().int().min(0).max(2800),priceIncludesTax:z.boolean()});
 
 async function adminClient(){
   const supabase=await createClient();
@@ -61,12 +62,17 @@ export async function PATCH(request:Request){
   const {supabase,user,authorized}=await adminClient();
   if(!supabase)return NextResponse.json({error:"Store services are not configured."},{status:503});
   if(!authorized||!user)return NextResponse.json({error:"Administrator access required."},{status:403});
-  const parsed=availabilitySchema.safeParse(await request.json().catch(()=>null));
-  if(!parsed.success)return NextResponse.json({error:"Choose a valid availability state."},{status:400});
-  const {error}=await supabase.from("product_availability").upsert({
-    variant_id:parsed.data.variantId,availability:parsed.data.availability,updated_by:user.id,
-  },{onConflict:"variant_id"});
-  if(error)return NextResponse.json({error:"Could not update product availability."},{status:500});
+  const payload=await request.json().catch(()=>null);
+  const availability=availabilitySchema.safeParse(payload);
+  if(availability.success){
+    const {error}=await supabase.from("product_availability").upsert({variant_id:availability.data.variantId,availability:availability.data.availability,updated_by:user.id},{onConflict:"variant_id"});
+    if(error)return NextResponse.json({error:"Could not update product availability."},{status:500});
+    return NextResponse.json({success:true});
+  }
+  const tax=taxSchema.safeParse(payload);
+  if(!tax.success)return NextResponse.json({error:"Enter a valid HSN code, GST rate and tax treatment."},{status:400});
+  const {error}=await supabase.from("product_variants").update({hsn_code:tax.data.hsnCode,gst_rate_bps:tax.data.gstRateBps,price_includes_tax:tax.data.priceIncludesTax}).eq("id",tax.data.variantId);
+  if(error)return NextResponse.json({error:"Could not update product tax details."},{status:500});
   return NextResponse.json({success:true});
 }
 
