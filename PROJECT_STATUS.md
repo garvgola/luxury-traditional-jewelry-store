@@ -1,105 +1,97 @@
-# Project Status
+# Production Readiness Status
 
 **Repository:** garvgola/luxury-traditional-jewelry-store  
 **Brand:** NAMO NAMO jewels  
-**Integrated branch:** `develop`  
-**Current phase:** Phase 2 — backend-connected customer and admin experience  
+**Integration branch:** develop  
+**Current phase:** Application implementation milestone merged; external setup and launch validation remain  
 **Last updated:** 2026-11-21
 
 ## Verified repository state
 
 - [x] Existing repository retained; no duplicate repository created.
-- [x] `main` retained as the stable baseline; `develop` is the integration branch.
-- [x] Phase 0 architecture, API, database and security contracts approved by the owner in the earlier project workflow.
-- [x] Phase 1 heritage-fusion design direction approved by the owner.
-- [x] PRs #8–#17 merged into `develop`.
-- [x] Integration CI has passed on the feature PRs: install, TypeScript, ESLint, production build and Playwright smoke tests.
-- [x] Feature PRs #8–#17 merged into `develop`.
-- [ ] Documentation reconciliation PR #18 is open for review.
+- [x] main retained as stable baseline; develop is the integration branch.
+- [x] PRs #8–#21 merged into develop.
+- [x] Feature PR CI passed TypeScript, ESLint, production build and Playwright smoke tests.
+- [ ] Latest post-merge develop CI run must complete successfully.
 
-## Implemented in `develop`
+## Implemented in develop
 
 ### Storefront and customer experience
-- [x] Responsive Next.js 15 / React 19 / TypeScript storefront.
-- [x] Supabase browser/server clients and cookie-based session refresh.
-- [x] Customer sign-up, sign-in, email confirmation and sign-out.
-- [x] Customer account page and recent order history.
-- [x] Database-backed product catalogue, product details, category pages and search.
-- [x] Persistent authenticated cart API/UI: read, add, quantity update and remove.
-- [x] Customer wishlist API/UI: read, save and remove.
-- [x] Customer delivery-address CRUD and atomic default-address switching.
-- [x] Product image rendering through signed URLs for published products.
+- [x] Responsive Next.js 15 / React 19 / TypeScript heritage-fusion storefront.
+- [x] Supabase SSR clients, customer registration/sign-in/email confirmation and account.
+- [x] Database-backed catalogue, categories, search and product details.
+- [x] Customer-selectable product variants with price, tax treatment and availability.
+- [x] Product gallery with signed private-storage URLs, thumbnails and accessible navigation.
+- [x] Authenticated persistent cart, wishlist and delivery-address CRUD.
+- [x] Customer order detail, confirmation and shipment tracking view.
 
 ### Administration
-- [x] Server-side admin role gate.
-- [x] Dashboard metrics and read-only recent order listing.
-- [x] Product creation with initial variant, availability updates and archive.
-- [x] Category creation, activation/deactivation and product category assignment.
-- [x] Admin shipping-zone/rate management.
-- [x] Admin product image upload to a private storage bucket.
+- [x] Server-side admin role gate and dashboard.
+- [x] Product create/edit/archive, category assignment and variant create/edit.
+- [x] HSN/GST classification and price-inclusive/exclusive configuration.
+- [x] Private product image upload, ordering, alt-text editing and removal.
+- [x] Category management and shipping zone/rate management.
+- [x] Order fulfilment: paid → processing → shipped → delivered, with tracking and audit history.
 
-### Checkout and quality
-- [x] Authenticated server-side shipping quote endpoint using database prices and the restricted quote RPC.
-- [x] Checkout shipping-estimate screen; no false payment success or order creation.
-- [x] Playwright smoke tests for homepage, catalogue empty state, login, signup, cart backend-unconfigured state and mobile navigation.
-- [x] GitHub Actions runs install, TypeScript, ESLint, production build, Chromium setup and Playwright tests.
+### Checkout and security
+- [x] Server-side shipping quote and atomic order snapshots.
+- [x] Customer checkout idempotency and Razorpay order creation.
+- [x] HMAC signature and provider API payment verification.
+- [x] Signed Razorpay webhook reconciliation for captured/failed payments.
+- [x] Idempotent payment events and cart finalization after verified capture.
+- [x] Security headers and baseline CSP.
+- [x] GitHub Actions TypeScript, ESLint, production build and Playwright smoke tests.
 
-## External configuration and runtime verification still required
+## External setup and runtime validation still required
 
-- [ ] Create a disposable development Supabase project and configure `.env.local`.
+- [ ] Connect a development Supabase project.
 - [ ] Apply migrations 00100 through 00700 in order.
-- [ ] Run pgTAP database tests; they have not been executed against a Supabase instance.
-- [ ] Create the owner Auth account and grant the `admin` role using `docs/backend/ADMIN_BOOTSTRAP.md`.
+- [ ] Run pgTAP tests against development Supabase.
+- [ ] Bootstrap the owner Auth account and grant admin role using docs/backend/ADMIN_BOOTSTRAP.md.
 - [ ] Configure the server-only Supabase service-role key.
-- [ ] Test authentication, customer RLS isolation, cart, wishlist, address CRUD, admin authorization and storage policies against the development project.
-- [ ] Configure shipping zones/rates and test the quote endpoint with real test addresses.
-- [ ] Add real catalogue records and owner-approved product photography.
-- [x] Production checkout/payment code added on `feature/production-checkout-payments`: atomic order snapshot, idempotency, Razorpay order creation, signature verification, captured/failed webhook reconciliation and customer order detail.
-- [ ] Apply migrations 006 and 007 and run pgTAP against development Supabase.
-- [ ] Configure Razorpay test keys/webhook and validate successful, failed, duplicate and delayed events.
-- [ ] Confirm GST/HSN, seller registration, state/place-of-supply, freight tax, invoice numbering and price-inclusion treatment with owner/accountant.
-- [x] Razorpay order creation, HMAC/API payment verification, signed captured/failed webhook reconciliation and idempotent order updates added on `feature/production-checkout-payments`.
-- [x] Admin fulfilment transitions paid → processing → shipped → delivered, with carrier/tracking and audit history, added on `feature/production-checkout-payments`.
-- [ ] Merge PR #19 after the latest CI run passes.
-- [ ] Apply migration 006 and run pgTAP against development Supabase.
-- [ ] Verify Razorpay test payments, failed payments, duplicate/delayed webhooks and payment reconciliation against merchant test credentials.
-- [ ] Complete checkout, order confirmation, email notifications and order history testing.
-- [x] Product variant creation/selection, price/SKU editing, image ordering/alt-text management and security headers added on `feature/product-variants`.
-- [ ] Complete refunds/cancellations, image alt-text moderation, transactional email notifications and remaining management workflows.
-- [ ] Run full browser, accessibility, security and performance testing.
-- [ ] Configure Vercel and verify a deployment before claiming a live URL.
+- [ ] Runtime-test authentication, customer RLS isolation, cart, wishlist, addresses, admin authorization, product/category/variant CRUD, storage policies and shipping quotes.
+- [ ] Configure shipping zones/rates and test real PIN codes.
+- [ ] Add real owner catalogue records and approved product photography.
+- [ ] Configure Razorpay test keys and webhook secret in encrypted environment variables.
+- [ ] Test successful/failed payments, duplicate/delayed webhooks and signature/amount mismatches.
+- [ ] Confirm GST registration, seller state, place-of-supply, CGST/SGST vs IGST, freight tax, invoice numbering and price inclusion with owner/accountant.
+- [ ] Complete a legally reviewed GST invoice output.
+- [ ] Configure transactional email provider and verified sender domain.
+- [ ] Finalize returns, cancellation, refund and dispute policies before enabling those workflows.
+- [ ] Complete full checkout E2E, accessibility, security and performance testing.
+- [ ] Connect Vercel account/team, configure environment variables and deploy a preview.
+- [ ] Verify custom domain and preview before owner-approved production release.
 
-## Current limitations
+## Current limitations — not production-ready yet
 
-- Supabase credentials are not available in this development environment. Code and CI are validated, but live database-backed flows are not yet runtime-verified.
-- The database migration and pgTAP suite have not been applied/executed against a real Supabase project.
-- No real product catalogue or owner-approved product photography has been supplied; no products or sales data are fabricated.
-- Checkout/payment and basic admin fulfilment code is implemented but must remain inactive until Supabase migration 006, test credentials, tax/invoice rules and webhook runtime tests are completed. GST split/invoice engine, refunds and notifications remain outstanding.
-- No production deployment exists or has been verified.
+- Supabase migrations, pgTAP, RLS, storage and RPCs have not been run against a real project.
+- Razorpay code has not been tested with merchant test credentials or a configured webhook.
+- Product GST totals are stored/calculated per variant, but seller GST details, tax split, freight tax and invoice rules are unconfirmed. This is not a legally reviewed GST invoice engine.
+- No owner-supplied catalogue or approved product photography has been entered.
+- Refunds, partial refunds, cancellations after payment, disputes and transactional notifications are not implemented.
+- No Vercel project/team or production deployment has been verified; no live URL is claimed.
 
-## Confirmed release-one business rules
+## Release-one rules currently encoded
 
-- Visitors may browse without an account; sign-in is required before checkout.
-- Product availability is owner-managed; no per-variant quantity inventory or automatic stock decrement in release one.
-- Shipping is location-based and owner-configured by postal-code zone/rate.
-- Delivery estimates are indicative, not guaranteed.
-- No courier API, guest checkout or returns/refunds workflow in release one.
-- All INR monetary values are integer paise.
+- Visitors can browse; sign-in is required before checkout.
+- Product availability is owner-managed; no per-variant quantity inventory or automatic stock decrement.
+- Shipping is configured by postal-code zone/rate; delivery estimates are indicative.
+- No guest checkout, courier API or automated returns/refunds workflow until separately approved.
+- INR values are integer paise.
 
 ## Release controls
 
 - No live Razorpay payments without explicit owner approval.
-- No production deployment without QA sign-off and explicit owner approval.
-- No production migration or destructive data change without owner approval.
+- No production migration or destructive data change without approval and backup.
+- No production deployment before runtime QA and owner approval.
 - Never commit secrets or real customer data.
-- Mark a feature runtime-complete only after external configuration and test evidence exist.
+- Mark features runtime-complete only after external configuration and test evidence exist.
 
 ## Next actions
 
-1. Configure the development Supabase project, apply all five migrations and run pgTAP tests.
-2. Bootstrap the owner admin account and configure the server-only service-role key.
-3. Test authentication, RLS, cart, wishlist, addresses, category/product CRUD, media and shipping quote flows.
-4. Confirm tax/GST and invoice rules with the owner/accountant.
-5. Implement and test Razorpay test mode with server-side signatures, verified webhooks and idempotent order updates.
-6. Complete remaining admin workflows and full QA.
-7. Configure and verify Vercel deployment only after the above release gates pass.
+1. Connect Supabase, apply migrations 00100–00700 and run pgTAP.
+2. Bootstrap the owner admin account and test RLS/storage/checkout.
+3. Add owner products, photos and accountant-confirmed tax settings.
+4. Configure Razorpay test mode and verify webhooks.
+5. Confirm GST/invoice, email and returns/refund policies.
+6. Connect Vercel, deploy preview and complete QA before production approval.
