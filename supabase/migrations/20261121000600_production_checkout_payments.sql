@@ -263,6 +263,9 @@ begin
   select * into v_payment from public.payments p where p.provider_order_id=p_provider_order_id for update;
   if not found then raise exception 'Payment order not found'; end if;
   if v_payment.amount_paise<>p_amount_paise or v_payment.currency<>'INR' then raise exception 'Payment amount or currency mismatch'; end if;
+  if v_payment.provider_payment_id is not null and v_payment.provider_payment_id<>p_provider_payment_id then
+    raise exception 'A different payment is already linked to this order';
+  end if;
   if v_payment.status='captured' then
     update public.payments set provider_payment_id=coalesce(provider_payment_id,p_provider_payment_id),
       verified_at=coalesce(verified_at,now()) where id=v_payment.id;
