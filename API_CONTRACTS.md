@@ -96,3 +96,12 @@ Every route requires schema tests, authentication/authorization tests, ownership
 - Do not expose stock quantity or implement automatic inventory reservation/decrement in release one. Product/variant availability is maintained manually by the owner and may be surfaced through a simple availability/lead-time field. The server must prevent ordering items explicitly marked unavailable.
 - Returns/refunds endpoints are future scope and must not be presented as available in the first release.
 - Shipping-provider integrations are out of scope. Admin/owner workflows may record courier name, tracking reference, dispatch date, and fulfilment status manually. Final shipping charges must be shown before order placement; the pricing rule needs owner confirmation.
+
+
+## 9. Shipping and delivery contract decisions (2026-11-21)
+
+- Checkout quote must accept the selected delivery address/location and return the server-calculated location-based shipping fee in integer paise, together with subtotal, tax/discount fields where applicable, total, currency, and an estimated delivery window.
+- The shipping fee and estimate must be persisted as part of the order snapshot so later rate changes do not alter existing orders.
+- Shipping rates/regions and delivery estimate rules are owner-managed configuration. Do not trust a shipping fee or delivery estimate supplied by the client.
+- No courier booking, label generation, live tracking, or carrier API integration is required for release one. Admin may record shipment/tracking details manually if the owner wants them.
+- Estimated delivery wording must make clear that the window is indicative and can vary; do not represent it as guaranteed.
