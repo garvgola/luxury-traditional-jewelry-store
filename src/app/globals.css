@@ -244,3 +244,9 @@ button { font: inherit; }
 .admin-tax-editor button{padding:7px 9px;background:var(--burgundy-800);color:white;font-size:10px}
 .admin-tax-editor small{grid-column:1/-1;color:var(--muted-600);font-size:10px}
 @media(max-width:600px){.admin-tax-editor{grid-template-columns:1fr 1fr}.admin-tax-editor button{grid-column:1/-1}}
+
+.admin-order-list{display:grid;gap:14px}.admin-order-card{padding:20px 22px;background:#fffdf9;border:1px solid var(--line-200)}
+.admin-order-top{display:flex;justify-content:space-between;gap:18px;align-items:center}.admin-order-top>div{display:grid;gap:7px}.admin-order-top small{font-size:11px;color:var(--muted-600)}.admin-order-top>div:last-child{justify-items:end}
+.admin-order-actions{display:flex;justify-content:flex-end;gap:15px;align-items:end;margin-top:18px}.admin-shipment-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-right:auto}.admin-shipment-fields label{display:grid;gap:6px;font-size:11px;color:var(--muted-600)}.admin-shipment-fields input{padding:9px;border:1px solid var(--line-200);background:var(--ivory-50)}
+.admin-order-tracking{font-size:12px;color:var(--muted-600)}
+@media(max-width:700px){.admin-order-top{align-items:start}.admin-order-actions{display:grid}.admin-shipment-fields{grid-template-columns:1fr}.admin-order-actions .button{width:100%}}
