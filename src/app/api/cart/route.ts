@@ -39,7 +39,8 @@ export async function POST(request: Request) {
   const { variantId, quantity } = parsed.data;
   const { data: variant } = await supabase.from("product_variants")
     .select("id,is_active,products!inner(status)").eq("id", variantId).maybeSingle();
-  if (!variant || !variant.is_active || (variant.products as {status:string}).status !== "active") {
+  const relatedProduct = Array.isArray(variant?.products) ? variant.products[0] : variant?.products;
+  if (!variant || !variant.is_active || relatedProduct?.status !== "active") {
     return NextResponse.json({ error: "This piece is currently unavailable." }, { status: 404 });
   }
   const { data: availability } = await supabase.from("product_availability")
