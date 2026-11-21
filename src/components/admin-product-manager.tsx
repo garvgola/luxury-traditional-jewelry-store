@@ -23,7 +23,7 @@ export function AdminProductManager({products:initial,categories}:{products:Admi
   const [products,setProducts]=useState(initial);
   const [name,setName]=useState("");const [slug,setSlug]=useState("");const [description,setDescription]=useState("");
   const [price,setPrice]=useState("");const [sku,setSku]=useState("");const [categoryId,setCategoryId]=useState("");
-  const [hsnCode,setHsnCode]=useState("");const [gstRate,setGstRate]=useState("");const [priceIncludesTax,setPriceIncludesTax]=useState(true);const [availability,setAvailability]=useState<Availability>("available_to_order");
+  const [hsnCode,setHsnCode]=useState("");const [gstRate,setGstRate]=useState("");const [priceIncludesTax:priceIncludesTax===true,setPriceIncludesTax]=useState<boolean|null>(null);const [availability,setAvailability]=useState<Availability>("available_to_order");
   const [busy,setBusy]=useState(false);const [error,setError]=useState("");const [message,setMessage]=useState("");
 
   function changeName(value:string){setName(value);setSlug(value.toLowerCase().normalize("NFKD").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""));}
@@ -31,6 +31,7 @@ export function AdminProductManager({products:initial,categories}:{products:Admi
     event.preventDefault();setBusy(true);setError("");setMessage("");
     const priceNumber=Number(price);
     if(!Number.isFinite(priceNumber)||priceNumber<=0){setError("Enter a valid price in rupees.");setBusy(false);return;}
+    if(!hsnCode||!gstRate||priceIncludesTax===null){setError("Enter the accountant-confirmed HSN, GST rate and tax treatment.");setBusy(false);return;}
     try{
       const response=await fetch("/api/admin/products",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
         name,slug,description,categoryId:categoryId||null,pricePaise:Math.round(priceNumber*100),sku,variantLabel:"Default",availability,
@@ -63,7 +64,7 @@ export function AdminProductManager({products:initial,categories}:{products:Admi
       <label>Category<select value={categoryId} onChange={event=>setCategoryId(event.target.value)}><option value="">Uncategorized</option>{categories.filter(category=>category.is_active).map(category=><option key={category.id} value={category.id}>{category.name}</option>)}</select></label>
       <div className="admin-form-row"><label>Price (₹)<input required type="number" min="0.01" step="0.01" value={price} onChange={event=>setPrice(event.target.value)}/></label><label>SKU (optional)<input value={sku} onChange={event=>setSku(event.target.value)}/></label></div>
       <div className="admin-form-row"><label>HSN code<input required inputMode="numeric" pattern="[0-9]{4,8}" value={hsnCode} onChange={event=>setHsnCode(event.target.value)} placeholder="4–8 digit HSN"/></label><label>GST rate (%)<input required type="number" min="0" max="28" step="0.01" value={gstRate} onChange={event=>setGstRate(event.target.value)} placeholder="As confirmed by accountant"/></label></div>
-      <label>Product price tax treatment<select value={priceIncludesTax?"inclusive":"exclusive"} onChange={event=>setPriceIncludesTax(event.target.value==="inclusive")}><option value="inclusive">Listed price includes GST</option><option value="exclusive">GST added to listed price</option></select></label>
+      <label>Product price tax treatment<select required value={priceIncludesTax===null?"":priceIncludesTax?"inclusive":"exclusive"} onChange={event=>setPriceIncludesTax(event.target.value===""?null:event.target.value==="inclusive")}><option value="" disabled>Choose accountant-confirmed treatment</option><option value="inclusive">Listed price includes GST</option><option value="exclusive">GST added to listed price</option></select></label>
       <p className="admin-form-hint">Enter the HSN, applicable GST rate and whether the listed price includes GST exactly as confirmed by your accountant. These values are saved with the product variant.</p>
       <label>Availability<select value={availability} onChange={event=>setAvailability(event.target.value as Availability)}><option value="available_to_order">Available to order</option><option value="made_to_order">Made to order</option><option value="temporarily_unavailable">Temporarily unavailable</option></select></label>
       {error&&<p className="form-error" role="alert">{error}</p>}{message&&<p className="form-success" role="status">{message}</p>}
