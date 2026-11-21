@@ -38,7 +38,7 @@ export async function POST(request:Request){
   try{
     const authorization=Buffer.from(`${process.env.RAZORPAY_KEY_ID}:${secret}`).toString("base64");
     const providerResponse=await fetch(`https://api.razorpay.com/v1/payments/${encodeURIComponent(providerPaymentId)}`,{
-      headers:{Authorization:`Basic ${authorization}`},cache:"no-store",
+      headers:{Authorization:`Basic ${authorization}`},cache:"no-store",signal:AbortSignal.timeout(12000),
     });
     const providerPayment=await providerResponse.json().catch(()=>null) as {id?:string;order_id?:string;amount?:number;currency?:string;status?:string}|null;
     if(!providerResponse.ok||providerPayment?.id!==providerPaymentId||providerPayment.order_id!==providerOrderId||
