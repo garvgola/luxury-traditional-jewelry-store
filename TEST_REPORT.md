@@ -23,6 +23,17 @@ Feature pull requests #8–#17 passed their required CI checks before merge. The
 - Cart backend-unconfigured state (ensures no false success).
 - Mobile navigation and account link.
 
+## Added checkout/payment code (not runtime-verified)
+
+- Atomic server-side order snapshot with customer idempotency.
+- Product HSN/GST configuration and server-side total calculation.
+- Razorpay order creation with a short-lived payment claim.
+- Payment signature verification and provider API confirmation.
+- Signed webhook reconciliation for captured/failed events and duplicate event IDs.
+- Customer order detail/confirmation view.
+
+These routes have not been exercised against Supabase or Razorpay test credentials. The pgTAP suite includes new permission/schema assertions, but has not been executed against a Supabase project.
+
 ## Not yet tested
 
 - Supabase migrations and pgTAP.
