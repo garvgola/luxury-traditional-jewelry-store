@@ -13,7 +13,7 @@ Implemented code includes:
 - RLS policies on application tables.
 - Server-side customer APIs, admin role checks, private product media upload/read policies and shipping quote integration.
 
-The presence of schema tables for orders/payments does not mean the checkout/payment workflow is implemented. Razorpay order creation, signature verification, webhooks and order creation remain outstanding.
+The presence of schema tables for orders/payments does not mean the checkout/payment workflow is implemented. Razorpay order creation, signature verification and captured/failed webhook reconciliation are implemented in the application code. They still require migration 006, merchant test credentials and live runtime verification.
 
 ## Migration sequence
 
