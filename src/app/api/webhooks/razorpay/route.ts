@@ -11,6 +11,8 @@ export async function POST(request:Request){
   const eventId=request.headers.get("x-razorpay-event-id")||"";
   if(!/^[a-f0-9]{64}$/i.test(signature)||!eventId||eventId.length>200)
     return NextResponse.json({error:"Invalid webhook headers."},{status:400});
+  const contentLength=Number(request.headers.get("content-length")||0);
+  if(contentLength>1024*1024)return NextResponse.json({error:"Webhook payload too large."},{status:413});
   const rawBody=await request.text();
   if(rawBody.length>1024*1024)return NextResponse.json({error:"Webhook payload too large."},{status:413});
   const expected=createHmac("sha256",secret).update(rawBody).digest("hex");
