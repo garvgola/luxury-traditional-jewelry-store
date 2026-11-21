@@ -9,7 +9,9 @@ export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });
   const supabase = createServerClient(url, key, {
     cookies: {
-      getAll: () => request.cookies.getAll(),
+      getAll() {
+        return request.cookies.getAll();
+      },
       setAll(cookiesToSet, headers) {
         cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
         response = NextResponse.next({ request });
