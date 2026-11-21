@@ -17,7 +17,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
   `).eq("slug",slug).eq("status","active").maybeSingle();
   if (!product) notFound();
   const variant = product.product_variants?.find((item: {is_active:boolean})=>item.is_active);
-  const availability = variant?.product_availability;
+  const availabilityRows = variant?.product_availability;
+  const availability = Array.isArray(availabilityRows) ? availabilityRows[0] : availabilityRows;
   return <section className="product-detail page-section">
     <div className="product-visual"><div className="product-placeholder"><span>✧</span><small>NAMO NAMO JEWELS</small></div></div>
     <div className="product-information">
