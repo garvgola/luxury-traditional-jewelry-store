@@ -100,13 +100,14 @@ The documents on `develop` define the design baseline for Agent 2 frontend imple
 
 - [x] Brand name confirmed: **NAMO NAMO jewels**.
 - [x] Visual direction confirmed: **heritage fusion** (traditional Indian jewellery character with contemporary luxury design).
-- [x] Owner confirms an existing logo is available.
-- [ ] Owner supplies the official logo asset (prefer SVG or high-resolution transparent PNG) and any usage rules.
-- [ ] Agent 1 incorporates the supplied logo and prepares final visual previews for owner review.
+- [x] Owner selected the generated cream/ivory-background logo concept as the primary brand direction.
+- [x] Earlier burgundy-background logo concept is not the primary version.
+- [ ] Prepare production-ready vector/transparent and compact logo variants from the approved concept.
+- [ ] Agent 1 incorporates the selected logo direction and prepares final visual previews for owner review.
 
 ## Phase 1 next actions
 
 1. Refine the design system and page specifications for NAMO NAMO jewels.
-2. Obtain and inspect the actual logo asset before integrating it.
-3. Produce homepage, catalogue, product detail, and mobile header visual previews.
+2. Prepare a production-ready vector/transparent master and compact logo variants from the selected cream-background concept.
+3. Produce homepage, catalogue, product detail, and mobile header visual previews using the selected brand direction.
 4. Obtain owner approval of the visual direction and key page layouts before frontend implementation.
