@@ -19,13 +19,13 @@ export async function POST(request:Request){
   let event:{event?:string;payload?:{payment?:{entity?:{id?:string;order_id?:string;amount?:number;currency?:string;status?:string}}}};
   try{event=JSON.parse(rawBody) as typeof event;}catch{return NextResponse.json({error:"Invalid webhook JSON."},{status:400});}
   const type=event.event||"";
-  if(type!=="payment.captured"&&type!=="order.paid")return NextResponse.json({received:true,ignored:true});
+  if(type!=="payment.captured"&&type!=="order.paid"&&type!=="payment.failed")return NextResponse.json({received:true,ignored:true});
   const payment=event.payload?.payment?.entity;
-  if(!payment?.id||!payment.order_id||!Number.isInteger(payment.amount)||payment.currency!=="INR"||payment.status!=="captured")
+  if(!payment?.id||!payment.order_id||!Number.isInteger(payment.amount)||payment.currency!=="INR"||(type==="payment.failed"?payment.status!=="failed":payment.status!=="captured"))
     return NextResponse.json({error:"Captured payment details are incomplete."},{status:400});
   const admin=createAdminClient();
   if(!admin)return NextResponse.json({error:"Payment database is unavailable."},{status:503});
-  const {data:orderId,error}=await admin.rpc("mark_razorpay_payment_captured",{
+  const {data:orderId,error}=await admin.rpc(type==="payment.failed"?"mark_razorpay_payment_failed":"mark_razorpay_payment_captured",{
     p_provider_order_id:payment.order_id,p_provider_payment_id:payment.id,
     p_amount_paise:payment.amount,p_event_id:eventId,p_event_type:type,
   });
