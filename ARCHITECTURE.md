@@ -80,3 +80,9 @@ No feature implementation or production activation should proceed until the owne
 - Do not implement per-variant stock tracking in the first release. The business will procure stock based on demand and manage availability manually. The storefront should support an owner-managed product availability/lead-time status so customers are not promised immediately available stock without confirmation. A fuller inventory-management module may be added later.
 - Returns, exchanges, and refunds are not part of the first-release operational workflow. Keep order/payment design extensible so these can be added in a later phase.
 - Shipping will be managed by the owner. Do not integrate a shipping aggregator/provider in the first release. Allow the owner to manage shipping details/status manually and define how shipping charges are communicated before checkout implementation.
+
+
+## 11. Shipping and delivery decisions recorded (2026-11-21)
+
+- Shipping charges will be location-based. The checkout quote must calculate or retrieve the applicable charge using the customer's delivery location and show the final amount before order placement/payment. The owner will maintain the rate/zone rules; no shipping-carrier API integration is required in release one.
+- Display an estimated delivery window to the customer. Estimates should be configurable and based on the owner's operational assumptions; do not promise a guaranteed date unless the owner explicitly confirms one. The admin should be able to adjust or override the estimate when needed.
