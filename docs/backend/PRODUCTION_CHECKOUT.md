@@ -67,7 +67,7 @@ Do not enable live keys or production payments until the owner approves the merc
 
 - This does not implement refunds, partial refunds, chargebacks/disputes, cancellations after payment, or payment reconciliation dashboard.
 - Email/SMS order notifications are not yet implemented.
-- Order fulfilment/status transitions are not yet implemented.
+- Admin fulfilment transitions are implemented for paid → processing → shipped → delivered, with carrier/tracking details and audit history. Refund/cancellation flows remain outstanding.
 - GST split and final tax invoice generation are not yet approved/implemented.
 - The webhook route must be reachable publicly over HTTPS and configured in Razorpay.
 - The development Supabase database, migrations, RLS and storage policies still need runtime verification.
