@@ -1,6 +1,6 @@
 # Deployment Report
 
-<badge>Not deployed</badge>
+**Status: NOT DEPLOYED**
 
 - Repository: `garvgola/luxury-traditional-jewelry-store`
 - Integrated branch: `develop`
