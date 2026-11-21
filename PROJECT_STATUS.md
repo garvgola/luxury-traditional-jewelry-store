@@ -78,3 +78,18 @@ See [Phase 0 GitHub issue #1](https://github.com/garvgola/luxury-traditional-jew
 - Checkout quote must calculate shipping from the delivery location on the server and display the complete payable total before payment.
 - Owner-managed shipping configuration is required; courier/carrier API integration is not.
 - Estimated delivery windows must be configurable and saved with the order.
+
+
+## Repository audit and workflow setup (2026-11-21)
+
+- [x] Confirmed the eight Phase 0 governance files and README are present on `main`.
+- [x] Created `develop` from `main` as the integration branch.
+- [x] Inspected the known repository root files: no application source code, package manifest, database migrations, tests, or deployment configuration are present yet. This is an empty application baseline, not a completed source-code audit.
+- [ ] Add CI, lint/typecheck/test scripts, and branch protection after the application framework and team review workflow are selected.
+- [ ] Owner approval of Phase 0 architecture and contracts.
+
+## Current branch workflow
+
+- `main`: stable baseline; changes should arrive through reviewed pull requests.
+- `develop`: integration branch for approved feature work.
+- Feature branches should be created from `develop` and merged back through pull requests after checks pass. Do not merge unreviewed changes directly to `main`.
