@@ -24,7 +24,7 @@ The customer experience and admin foundations have been merged into `develop`. S
 - Supabase Auth, PostgreSQL and Storage (Storage bucket/policies still to be configured)
 - Zod validation
 - Razorpay (planned; no live payment activation)
-- GitHub Actions CI
+- GitHub Actions CI with Playwright browser smoke tests
 - Vercel (deployment not yet configured)
 
 ## Local development
