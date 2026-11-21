@@ -1,51 +1,49 @@
-# Luxury Traditional Jewellery Store
+# NAMO NAMO jewels
 
-A premium traditional Indian jewellery e-commerce experience.
+A luxury Indian jewellery storefront built with Next.js, React, TypeScript and Tailwind CSS. The visual direction is heritage fusion: traditional Indian jewellery references presented through a contemporary, accessible shopping experience.
 
-## Project status
+## Current implementation status
 
-**Current phase:** Phase 0 — Architecture audit and project foundation  
-**Status:** Repository initialization and architecture baseline
+The `feature/frontend-foundation` branch contains the initial frontend scaffold, responsive site shell, homepage, shared navigation/footer components, and placeholder routes. The current catalogue is intentionally not populated with invented product claims or stock quantities. Authentication, database integration, checkout, Razorpay, admin operations and production deployment are not implemented yet.
 
-## Planned technology stack
+## Run locally
 
-- Next.js, React, TypeScript
-- Tailwind CSS
-- Supabase and PostgreSQL
-- Razorpay for payments
-- Vercel for deployment
-- GitHub for source control and collaboration
+Requirements: Node.js 22 LTS and npm.
 
-## Design direction
+```bash
+npm install
+npm run dev
+```
 
-A refined traditional-luxury identity using deep burgundy, antique gold, ivory, champagne beige, and muted earthy tones. Typography will pair elegant serif headings with a clean sans-serif body font.
+Open http://localhost:3000.
 
-## Engineering principles
+Validation commands:
 
-- Keep secrets and production customer data out of source control.
-- Enforce authorization on the server and database using Supabase Row Level Security.
-- Store INR monetary values as integer paise.
-- Verify Razorpay payment signatures and webhooks on the server.
-- Make inventory reservation and decrement operations atomic to reduce overselling.
-- Do not enable live payments or production deployment without explicit approval.
-- Do not begin feature implementation until the Phase 0 architecture gate is approved.
+```bash
+npm run typecheck
+npm run lint
+npm run build
+```
 
-## Phase 0 deliverables
+## Brand and design references
 
-- `ARCHITECTURE.md`
-- `DATABASE_SCHEMA.md`
-- `API_CONTRACTS.md`
-- `AGENT_ASSIGNMENTS.md`
-- `INTEGRATION_GUIDE.md`
-- `SECURITY_STANDARDS.md`
-- `PROJECT_STATUS.md`
+- `DESIGN_SYSTEM.md` — semantic color, typography, spacing, accessibility and interaction tokens.
+- `PAGE_SPECIFICATIONS.md` — storefront and customer flow requirements.
+- `COMPONENT_CATALOG.md` — shared UI component contracts.
+- `ARCHITECTURE.md`, `DATABASE_SCHEMA.md`, `API_CONTRACTS.md` — approved architecture proposals and service contracts.
 
-See [Phase 0 tracking issue](https://github.com/garvgola/luxury-traditional-jewelry-store/issues/1).
+## Important implementation constraints
 
-## Development workflow
+- Public browsing is allowed; a customer account is required before order placement.
+- The owner manages product availability manually. Do not expose fabricated stock counts or build per-variant stock reservation for release one.
+- Shipping is owner-managed and location-based. The final fee and estimated delivery window must be calculated server-side and shown before payment.
+- INR amounts must be represented as integer paise in commerce services.
+- Razorpay signatures and webhooks must be verified server-side before an order is marked paid.
+- Never commit secrets, live customer data, or payment credentials.
+- Do not activate live payments or production deployment without explicit owner approval.
 
-Work is organized into gated phases. Each specialist workstream must follow the shared contracts, document dependencies, and request human approval when a decision affects scope, cost, security, production data, or payment activation.
+## Branch workflow
 
-## Disclaimer
-
-This repository is being initialized. Architecture and implementation details remain subject to the Phase 0 review and approval.
+- `main`: stable baseline.
+- `develop`: integration branch.
+- `feature/*`: scoped implementation branches; merge through reviewed pull requests.
