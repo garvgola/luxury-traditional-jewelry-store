@@ -17,11 +17,18 @@ export default async function ProductPage({ params }: ProductPageProps) {
     product_images(id,storage_path,alt_text,sort_order)
   `).eq("slug",slug).eq("status","active").maybeSingle();
   if (!product) notFound();
+  const firstImage = product.product_images?.[0];
+  const { data: signedImage } = firstImage
+    ? await supabase.storage.from("product-media").createSignedUrl(firstImage.storage_path, 3600)
+    : { data: null };
+  const imageUrl = signedImage?.signedUrl;
   const variant = product.product_variants?.find((item: {is_active:boolean})=>item.is_active);
   const availabilityRows = variant?.product_availability;
   const availability = Array.isArray(availabilityRows) ? availabilityRows[0] : availabilityRows;
   return <section className="product-detail page-section">
-    <div className="product-visual"><div className="product-placeholder"><span>✧</span><small>NAMO NAMO JEWELS</small></div></div>
+    <div className={imageUrl ? "product-visual has-product-image" : "product-visual"} style={imageUrl ? {backgroundImage:`url("${imageUrl}")`} : undefined} role={imageUrl ? "img" : undefined} aria-label={firstImage?.alt_text || product.name}>
+      {!imageUrl && <div className="product-placeholder"><span>✧</span><small>NAMO NAMO JEWELS</small></div>}
+    </div>
     <div className="product-information">
       <Link href="/collections" className="eyebrow">The collection</Link>
       <h1>{product.name}</h1>

@@ -1,10 +1,12 @@
 "use client";
 
 import { FormEvent,useState } from "react";
+import { AdminProductImageUpload } from "@/components/admin-product-image-upload";
 
 type Availability="available_to_order"|"made_to_order"|"temporarily_unavailable";
 type AdminProduct={
   id:string;name:string;slug:string;description:string|null;status:string;
+  product_images:{id:string;storage_path:string;alt_text:string;sort_order:number}[];
   product_variants:{
     id:string;variant_label:string;sku:string|null;price_paise:number;is_active:boolean;
     product_availability:{availability:Availability}[]|{availability:Availability}|null;
@@ -60,7 +62,7 @@ export function AdminProductManager({products:initial}:{products:AdminProduct[]}
       <button className="button button-primary" disabled={busy}>{busy?"Saving…":"Create product"}</button>
     </form>
     <div className="admin-product-list"><h2>Catalogue</h2>{products.length===0?<p>No products have been added yet.</p>:products.map(product=><article className="admin-product-row" key={product.id}>
-      <div><strong>{product.name}</strong><small>/{product.slug} · {product.status}</small>
+      <div><strong>{product.name}</strong><small>/{product.slug} · {product.status}</small><AdminProductImageUpload productId={product.id}/>
         {product.product_variants.map(variant=>{
           const availabilityRow=variant.product_availability;
           const current=Array.isArray(availabilityRow)?availabilityRow[0]?.availability:availabilityRow?.availability;

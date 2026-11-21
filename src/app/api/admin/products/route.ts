@@ -31,7 +31,7 @@ export async function GET(){
   if(!supabase)return NextResponse.json({error:"Store services are not configured."},{status:503});
   if(!authorized)return NextResponse.json({error:"Administrator access required."},{status:403});
   const {data,error}=await supabase.from("products")
-    .select("id,name,slug,description,status,created_at,product_variants(id,variant_label,sku,price_paise,is_active,product_availability(availability))")
+    .select("id,name,slug,description,status,created_at,product_variants(id,variant_label,sku,price_paise,is_active,product_availability(availability)),product_images(id,storage_path,alt_text,sort_order)")
     .order("created_at",{ascending:false});
   if(error)return NextResponse.json({error:"Could not load products."},{status:500});
   return NextResponse.json({products:data??[]});
