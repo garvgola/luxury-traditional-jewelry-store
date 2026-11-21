@@ -33,6 +33,8 @@
 - [x] Checkout readiness guard that does not pretend to process payments.
 - [ ] CI validation of this workstream.
 - [x] Customer-owned wishlist API and UI (read, save and remove) added on `feature/wishlist-addresses`.
+- [x] Customer address CRUD, protected address page and atomic default-address switching added on `feature/address-management`.
+- [ ] Apply and test the default-address migration against the development Supabase project.
 - [ ] Supabase development project configured and migration applied.
 - [ ] Authentication, RLS and cart flows tested against Supabase.
 

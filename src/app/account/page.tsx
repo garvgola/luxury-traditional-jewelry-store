@@ -15,7 +15,7 @@ export default async function AccountPage() {
   return <section className="page-section account-page">
     <span className="eyebrow">Your NAMO NAMO account</span><h1>Welcome{profile?.full_name ? `, ${profile.full_name.split(" ")[0]}` : ""}</h1>
     <p className="account-email">{user.email}</p>
-    <div className="account-grid"><article><h2>Account details</h2><p>{profile?.full_name || "Name not added"}</p><p>{profile?.phone || "Phone not added"}</p><Link href="/account/profile" className="text-link">Manage details</Link></article>
+    <div className="account-grid"><article><h2>Account details</h2><p>{profile?.full_name || "Name not added"}</p><p>{profile?.phone || "Phone not added"}</p><Link href="/account/addresses" className="text-link">Manage delivery addresses</Link></article>
     <article><h2>Your orders</h2>{orders?.length ? orders.map(order=><div className="order-row" key={order.id}><div><strong>{order.order_number}</strong><small>{new Date(order.created_at).toLocaleDateString("en-IN")}</small></div><div><strong>{money(order.total_paise)}</strong><small>{order.status.replaceAll("_"," ")}</small></div></div>) : <p>Your order history will appear here after your first purchase.</p>}</article></div>
     <form action="/api/auth/logout" method="post"><button className="text-link" type="submit">Sign out</button></form>
   </section>;
