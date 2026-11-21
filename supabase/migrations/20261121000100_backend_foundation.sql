@@ -46,7 +46,7 @@ as $$
 $$;
 
 revoke all on function public.has_role(public.app_role) from public;
-grant execute on function public.has_role(public.app_role) to authenticated;
+grant execute on function public.has_role(public.app_role) to anon, authenticated;
 
 create or replace function public.handle_new_user()
 returns trigger language plpgsql security definer
