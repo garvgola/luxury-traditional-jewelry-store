@@ -117,7 +117,7 @@ The documents on `develop` define the design baseline for Agent 2 frontend imple
 
 - [x] Generated first Phase 1 visual concept board for the cream/ivory, antique-gold, burgundy heritage-fusion direction.
 - [x] Preview includes desktop homepage, collection listing, product detail, and mobile storefront concepts.
-- [ ] Owner reviews and approves the visual direction/layout before frontend implementation.
+- [x] Owner reviewed and approved the visual direction/layout before frontend implementation (2026-11-21).
 - [ ] Replace all illustrative product names, prices, delivery windows, and photography with verified owner-provided content before production.
 - [ ] Reconcile any visual-board color/font labels against the approved design tokens in `DESIGN_SYSTEM.md`; the written design-system tokens remain the source of truth unless the owner approves changes.
 
