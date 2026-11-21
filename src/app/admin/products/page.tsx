@@ -9,11 +9,15 @@ type ProductRow={
     product_availability:{availability:"available_to_order"|"made_to_order"|"temporarily_unavailable"}[]|{availability:"available_to_order"|"made_to_order"|"temporarily_unavailable"}|null;
   }[];
 };
+type CategoryRow={id:string;name:string;is_active:boolean};
 
 export default async function AdminProductsPage(){
   const supabase=await createClient();if(!supabase)return null;
-  const {data,error}=await supabase.from("products").select("id,name,slug,description,status,product_variants(id,variant_label,sku,price_paise,is_active,product_availability(availability)),product_images(id,storage_path,alt_text,sort_order)").order("created_at",{ascending:false});
-  return <section className="admin-content"><span className="eyebrow">Store operations</span><h1>Products</h1><p className="admin-intro">Create catalogue entries and maintain owner-managed availability.</p>
-    {error?<p className="form-error">Products could not be loaded. Check admin RLS policies.</p>:<AdminProductManager products={(data??[]) as unknown as ProductRow[]}/>}
+  const [productsResult,categoriesResult]=await Promise.all([
+    supabase.from("products").select("id,name,slug,description,status,product_variants(id,variant_label,sku,price_paise,is_active,product_availability(availability)),product_images(id,storage_path,alt_text,sort_order)").order("created_at",{ascending:false}),
+    supabase.from("categories").select("id,name,is_active").order("sort_order"),
+  ]);
+  return <section className="admin-content"><span className="eyebrow">Store operations</span><h1>Products</h1><p className="admin-intro">Create catalogue entries, assign categories, upload images and maintain owner-managed availability.</p>
+    {productsResult.error?<p className="form-error">Products could not be loaded. Check admin RLS policies.</p>:<AdminProductManager products={(productsResult.data??[]) as unknown as ProductRow[]} categories={(categoriesResult.data??[]) as CategoryRow[]}/>}
   </section>;
 }
