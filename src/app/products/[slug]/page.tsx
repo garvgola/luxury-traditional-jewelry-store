@@ -6,7 +6,6 @@ import { ProductGallery } from "@/components/product-gallery";
 import { createClient } from "@/lib/supabase/server";
 
 type ProductPageProps = { params: Promise<{ slug: string }> };
-const money = (paise: number) => new Intl.NumberFormat("en-IN",{style:"currency",currency:"INR",maximumFractionDigits:0}).format(paise/100);
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
